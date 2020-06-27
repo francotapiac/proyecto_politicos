@@ -1,22 +1,33 @@
 <template>
-  <router-view />
+  <div id="app">
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </div>
+    <router-view/>
+  </div>
 </template>
 
-<script>
-export default {
-  name: 'App',
-  created() {
-    const currentPath = this.$router.history.current.path;
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  background-color: red;
+}
 
-    if (window.localStorage.getItem('authenticated') === 'false') {
-      this.$router.push('/login');
-    }
+#nav {
+  padding: 30px;
+}
 
-    if (currentPath === '/' || currentPath === '/app') {
-      this.$router.push('/app/dashboard');
-    }
-  },
-};
-</script>
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
 
-<style src="./styles/theme.scss" lang="scss" />
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
+</style>
