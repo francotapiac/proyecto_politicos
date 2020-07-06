@@ -23,13 +23,15 @@ public class Tweet {
     public String realName;
     public int favoriteCount;
     public String profileImage;
+    public String perfilUser;
+    public String tweetURL;
     public String sentimentAnalysis;
 
     public Tweet(){}
 
    //Se crea tweet con sus respectivos atributos, para luego ser alamacenado en una BD.
    public Tweet(long tweetId, String text, Date createdAt, double latitude, double longitude,
-                 String city, String country, long userId, String userName, int followersCount, int retweetCount, String realName, int favoriteCount, String profileImage,String sentimentAnalysis) {
+                 String city, String country, long userId, String userName, int followersCount, int retweetCount, String realName, int favoriteCount, String profileImage,String perfilUser,String tweetURL,String sentimentAnalysis) {
 		this.tweetId = tweetId;
 		this.text = text;
 		this.createdAt = createdAt;
@@ -44,8 +46,11 @@ public class Tweet {
 		this.realName = realName;
 		this.favoriteCount = favoriteCount;
 		this.profileImage = profileImage;
+		this.perfilUser = perfilUser;
+		this.tweetURL = tweetURL;
 		this.sentimentAnalysis = sentimentAnalysis;
 	}
+
 
     //Funciones get y set para los atributos de Tweet (tal vez no tengan utilidad)
     public String get_id() {
