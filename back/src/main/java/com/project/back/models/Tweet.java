@@ -22,13 +22,14 @@ public class Tweet {
     public int retweetCount;
     public String realName;
     public int favoriteCount;
+    public String profileImage;
     public String sentimentAnalysis;
 
     public Tweet(){}
 
    //Se crea tweet con sus respectivos atributos, para luego ser alamacenado en una BD.
    public Tweet(long tweetId, String text, Date createdAt, double latitude, double longitude,
-                 String city, String country, long userId, String userName, int followersCount, int retweetCount, String realName, int favoriteCount, String sentimentAnalysis) {
+                 String city, String country, long userId, String userName, int followersCount, int retweetCount, String realName, int favoriteCount, String profileImage,String sentimentAnalysis) {
 		this.tweetId = tweetId;
 		this.text = text;
 		this.createdAt = createdAt;
@@ -42,6 +43,7 @@ public class Tweet {
 		this.retweetCount = retweetCount;
 		this.realName = realName;
 		this.favoriteCount = favoriteCount;
+		this.profileImage = profileImage;
 		this.sentimentAnalysis = sentimentAnalysis;
 	}
 
@@ -134,12 +136,28 @@ public class Tweet {
         this.followersCount = followersCount;
     }
 
-    public int getRetweetCount() {
-        return followersCount;
-    }
+    public int getRetweetCount() {return followersCount; }
 
     public void setRetweetCount(int retweetCount) {
         this.retweetCount = retweetCount;
+    }
+
+    public String getRealName() {return realName; }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public int getFavoriteCount() {return favoriteCount; }
+
+    public void setFavoriteCount(int favoriteCount) {
+        this.favoriteCount = favoriteCount;
+    }
+
+    public String getProfileImage() {return profileImage; }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public String getSentimentAnalysis() {
