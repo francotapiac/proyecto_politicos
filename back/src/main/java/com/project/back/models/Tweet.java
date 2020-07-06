@@ -20,13 +20,15 @@ public class Tweet {
     public String userName;  //mandar
     public int followersCount; //mandar
     public int retweetCount;
+    public String realName;
+    public int favoriteCount;
     public String sentimentAnalysis;
 
     public Tweet(){}
 
    //Se crea tweet con sus respectivos atributos, para luego ser alamacenado en una BD.
    public Tweet(long tweetId, String text, Date createdAt, double latitude, double longitude,
-                 String city, String country, long userId, String userName, int followersCount, int retweetCount,String sentimentAnalysis) {
+                 String city, String country, long userId, String userName, int followersCount, int retweetCount, String realName, int favoriteCount, String sentimentAnalysis) {
 		this.tweetId = tweetId;
 		this.text = text;
 		this.createdAt = createdAt;
@@ -38,6 +40,8 @@ public class Tweet {
 		this.userName = userName;
 		this.followersCount = followersCount;
 		this.retweetCount = retweetCount;
+		this.realName = realName;
+		this.favoriteCount = favoriteCount;
 		this.sentimentAnalysis = sentimentAnalysis;
 	}
 
