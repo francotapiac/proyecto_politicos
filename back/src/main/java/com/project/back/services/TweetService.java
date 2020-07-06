@@ -4,10 +4,12 @@ import com.project.back.models.NationalActuality;
 import com.project.back.models.Tweet;
 import com.project.back.repositories.TweetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -34,9 +36,27 @@ public class TweetService {
     //Función que retorna todos los tweets almacenado en la BD
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<Tweet> getAllNationalActualitys(){
+    public List<Tweet> getAllTweets(){
         return tweetRepository.findAll();
     }
+    @RequestMapping(value = "/sort", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Tweet> allSort(){
+        return  this.sortByRetweet();
+    }
+
+    @RequestMapping(value = "/sort/{count}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Tweet> searchCount(@PathVariable Integer count){
+        int i;
+        List<Tweet> tweetSort = this.sortByRetweet();
+        ArrayList<Tweet> newTweetSort = new ArrayList<Tweet>();
+        for(i = 0; i < count; i++){
+            newTweetSort.add(tweetSort.get(i));
+        }
+        return newTweetSort;
+    }
+
 
 
     @RequestMapping(method = RequestMethod.POST)
@@ -142,4 +162,13 @@ public class TweetService {
     public String TweetURL(long idTWeet,String userName){
         return "https://twitter.com/" + userName + "/status/" + idTWeet;
     }
+
+    public List<Tweet> sortByRetweet(){
+        List<Tweet> tweetSort = tweetRepository.findAll();
+        tweetSort.sort(Comparator.comparing(Tweet::getRetweetCount)
+                .reversed()
+        );
+        return  tweetSort;
+    }
+
 }

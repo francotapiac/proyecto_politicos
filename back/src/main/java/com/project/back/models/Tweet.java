@@ -141,7 +141,7 @@ public class Tweet {
         this.followersCount = followersCount;
     }
 
-    public int getRetweetCount() {return followersCount; }
+    public int getRetweetCount() {return retweetCount; }
 
     public void setRetweetCount(int retweetCount) {
         this.retweetCount = retweetCount;
