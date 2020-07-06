@@ -5,8 +5,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    layout: 'layout-dashboard'
   },
   mutations: {
+    SET_LAYOUT (state, newLayout){
+      state.layout = newLayout
+    }
   },
   actions: {
   },
