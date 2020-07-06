@@ -86,16 +86,16 @@ public class TweetService {
             List<Status> tweets = result.getTweets();
             for (Status tweet : tweets) {
                 if(tweet.getPlace() == null && tweet.getGeoLocation() == null){
-                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),"");
+                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),"");
                 }
                 else if(tweet.getPlace() == null){
-                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),"");
+                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),"");
                 }
                 else if(tweet.getGeoLocation() == null){
-                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),"");
+                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),"");
                 }
                 else{
-                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),"");
+                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),"");
                 }
                 System.out.println("Tweet guardado:" + "@" + tweet.getUser().getScreenName() + ":" + tweet.getText()+ "Retweet:" + tweet.getRetweetCount());
                 Count++;
@@ -112,7 +112,7 @@ public class TweetService {
         System.exit(0);
     }
 
-    public Tweet create(long tweetId, String text, Date createdAt, double latitude, double longitude, String city, String country, long userId, String userName, int followersCount, String sentimentAnalysis) {
-        return tweetRepository.save(new Tweet(tweetId, text, createdAt, latitude, longitude, city, country, userId, userName, followersCount, sentimentAnalysis));
+    public Tweet create(long tweetId, String text, Date createdAt, double latitude, double longitude, String city, String country, long userId, String userName, int followersCount, int retweetCount,String sentimentAnalysis) {
+        return tweetRepository.save(new Tweet(tweetId, text, createdAt, latitude, longitude, city, country, userId, userName, followersCount, retweetCount, sentimentAnalysis));
     }
 }
