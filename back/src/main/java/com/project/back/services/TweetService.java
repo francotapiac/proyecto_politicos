@@ -85,19 +85,30 @@ public class TweetService {
             result = twitter.search(query);
             List<Status> tweets = result.getTweets();
             for (Status tweet : tweets) {
-                if(tweet.getPlace() == null && tweet.getGeoLocation() == null){
-                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().get400x400ProfileImageURL(),"");
-                }
-                else if(tweet.getPlace() == null){
-                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().get400x400ProfileImageURL(),"");
-                }
-                else if(tweet.getGeoLocation() == null){
-                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().get400x400ProfileImageURL(), "");
+                //Verificación si tweet es Retweet o un tweet. En caso de ser RT, entonces el texto se obtendrá de getRetweetedStatus.
+                //En caso contrario, se obtiene de getText. Esto se hace para obtener el texto completo y no con ...
+                String tweetText;
+                if(tweet.getRetweetedStatus() == null){
+                    tweetText = tweet.getText();
                 }
                 else{
-                    this.create(tweet.getId(),tweet.getText(),tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().get400x400ProfileImageURL(),"");
+                    tweetText = tweet.getRetweetedStatus().getText();
                 }
-                System.out.println("Tweet guardado:" + "@" + tweet.getUser().getScreenName() + ":" + tweet.getText()+ "Retweet:" + tweet.getFavoriteCount() + tweet.getUser().get400x400ProfileImageURL());
+
+                //Se crean los tweets verificando si existen o no las geolocalizaciones y los lugares.
+                if(tweet.getPlace() == null && tweet.getGeoLocation() == null){
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),"");
+                }
+                else if(tweet.getPlace() == null){
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),"");
+                }
+                else if(tweet.getGeoLocation() == null){
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(), "");
+                }
+                else{
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),"");
+                }
+                System.out.println("Tweet guardado:" + "@" + tweet.getUser().getScreenName() + ":" + tweetText + "Retweet:" + tweet.getFavoriteCount() + tweet.getUser().getProfileImageURLHttps());
                 Count++;
             }
             try {
