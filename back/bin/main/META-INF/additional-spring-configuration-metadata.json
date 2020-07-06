@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "spring.mysql.pass",
+      "type": "java.lang.String",
+      "description": "Description for spring.mysql.pass."
+    },
+    {
+      "name": "spring.mysql.jdbc.driverClassName",
+      "type": "java.lang.String",
+      "description": "Description for spring.mysql.jdbc.driverClassName."
+    },
+    {
+      "name": "twitter.consumerSecret",
+      "type": "java.lang.String",
+      "description": "Description for twitter.consumerSecret."
+    }
+  ] }
