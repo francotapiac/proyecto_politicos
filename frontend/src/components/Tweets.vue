@@ -18,7 +18,7 @@
       >
         <template v-slot:icon>
           <v-avatar v-if="avatar">
-            <a v-bind:href="url2"><img src= listoftweets[n].profileImage ></a>
+            <a v-bind:href= listoftweets[n].perfilUser ><img :src= listoftweets[n].profileImage ></a>
           </v-avatar>
         </template>
         <span slot="opposite">Tus eu perfecto</span>
@@ -27,7 +27,7 @@
             <v-row no-gutters>
               {{ listoftweets[n].realName }}
               <v-divider class="mx-4" vertical></v-divider>
-              <a style="font-size:17px;" v-bind:href="url">{{ listoftweets[n].userName }}</a>
+              <a style="font-size:17px;" v-bind:href= listoftweets[n].perfilUser >@{{ listoftweets[n].userName }}</a>
             </v-row>
           </v-card-title>
             <v-card-text>
@@ -35,14 +35,17 @@
             </v-card-text>
           <v-divider class="my-1"></v-divider>
           <v-card-text>
-            <v-icon medium>{{ listoftweets[n].createdAt }}</v-icon>
-            <span> {{ new Date() }}</span>
+            <v-icon medium>today</v-icon>
+            <span> {{ listoftweets[n].createdAt }}</span>
             <v-divider class="mx-4" vertical></v-divider>
             <v-icon medium>repeat</v-icon>
             <span> Retweets: {{ listoftweets[n].retweetCount }}</span>
             <v-divider class="mx-4" vertical></v-divider>
             <v-icon medium>favorite</v-icon>
-            <span> Likes: {{ listoftweets[n].favoriteCount }}</span>
+            <span class="mr-16"> Likes: {{ listoftweets[n].favoriteCount }}</span>
+            <v-layout justify-end>
+              <span><v-btn small text> <v-icon medium>read_more</v-icon> Ver más</v-btn></span>
+            </v-layout>
           </v-card-text>
         </v-card>
       </v-timeline-item>
