@@ -33,70 +33,44 @@ public class TweetService {
 
    // TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
 
-    //Función que retorna todos los tweets almacenado en la BD
+    //Retorna todos los tweets almacenado en la BD
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Tweet> getAllTweets(){
         return tweetRepository.findAll();
     }
+
+    //Retorna una lista ordenada según Retweet de todos los tweet
     @RequestMapping(value = "/sort", method = RequestMethod.GET)
     @ResponseBody
     public List<Tweet> allSort(){
         return  this.sortByRetweet();
     }
 
+    //Retorna una lista ordenada según Retweet de count tweets, siendo count un entero de 0 a n.
     @RequestMapping(value = "/sort/{count}", method = RequestMethod.GET)
     @ResponseBody
     public List<Tweet> searchCount(@PathVariable Integer count){
-        int i;
-        List<Tweet> tweetSort = this.sortByRetweet();
+
+        List<Tweet> tweetSort = this.sortByRetweet();   //Obtiene tweets ordenados según Retweet
         ArrayList<Tweet> newTweetSort = new ArrayList<Tweet>();
-        for(i = 0; i < count; i++){
+
+        if(count > tweetSort.size()){                   //Revisa que count no exceda el largo de la lista de tweets
+            count = tweetSort.size();
+        }
+
+        for(int i = 0; i < count; i++){                 //Se recorre y agrega una cantidad count de tweets
             newTweetSort.add(tweetSort.get(i));
         }
         return newTweetSort;
     }
 
-
-
+    //Entrega una lista de tweets según una lista de palabras
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public void run() throws TwitterException {
-        /*twitterStream.addListener(new StatusListener () {
-            @Override
-            public void onException(Exception ex) {
 
-            }
-
-            public void onStatus(Status status){
-                                          System.out.println(status.getText());// print tweet text to console
-                                      }
-
-            @Override
-            public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-
-            }
-
-            @Override
-            public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-
-            }
-
-            @Override
-            public void onScrubGeo(long userId, long upToStatusId) {
-
-            }
-
-            @Override
-            public void onStallWarning(StallWarning warning) {
-
-            }
-        });
-        FilterQuery tweetFilterQuery = new FilterQuery(); // See
-        tweetFilterQuery.track("piñera"); // OR on keywords
-        tweetFilterQuery.language(new String[]{"es"}); // Note that language does not work properly on Norwegian tweets
-        twitterStream.filter(tweetFilterQuery);*/
 
         Query query = new Query("piñera");
         QueryResult result;
@@ -105,9 +79,6 @@ public class TweetService {
             result = twitter.search(query);
             List<Status> tweets = result.getTweets();
             for (Status tweet : tweets) {
-                //Verificación si tweet es Retweet o un tweet. En caso de ser RT, entonces el texto se obtendrá de getRetweetedStatus.
-                //En caso contrario, se obtiene de getText. Esto se hace para obtener el texto completo y no con ...
-                String tweetText;
 
                 //Obtención de ruta de perfil
                 String perfilUser = this.perfilUser(tweet.getUser().getScreenName());
@@ -115,9 +86,13 @@ public class TweetService {
                 //Obtención de ruta de twitter
                 String tweetURL = this.TweetURL(tweet.getId(),tweet.getUser().getScreenName());
 
+                //Verificación si tweet es Retweet o un tweet.  Esto se hace para obtener el texto completo y no con ...
+                String tweetText;
+                //En caso de ser Tweet, se obtiene de getText.
                 if(tweet.getRetweetedStatus() == null){
                     tweetText = tweet.getText();
                 }
+                // En caso de ser RT, entonces el texto se obtendrá de getRetweetedStatus.
                 else{
                     tweetText = tweet.getRetweetedStatus().getText();
                 }
