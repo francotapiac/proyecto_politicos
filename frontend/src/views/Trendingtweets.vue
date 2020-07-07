@@ -32,18 +32,29 @@
     created () {
       this.$store.commit('SET_LAYOUT', 'layout-dashboard')
       this.leerAPI();
+      
     },
     
     methods: {
-    leerAPI() {
-      axios
-        .get("https://localhost:8887/tweets")
+    async leerAPI() {
+      await axios
+        .get("http://localhost:8887/tweets")
         .then(response => {
           this.tweetList = response.data;
         })
         .catch(error => {
           console.log(error);
         });
+        this.fixList();
+    },
+
+    fixList(){
+      let auxDate;
+      for (let i = 0; i < this.tweetList.length; i++) {
+          auxDate = this.tweetList[i].createdAt.substring(0,10);
+          this.tweetList[i].createdAt = auxDate.split("-").reverse().join("-");
+      }
+      console.log(this.tweetList[0].createdAt);
     }
   }
 
