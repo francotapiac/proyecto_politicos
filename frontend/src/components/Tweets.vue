@@ -1,28 +1,35 @@
 <template>
-  <div>
+  <v-row>
+    <!-- Componente Timeline
+    align-top= ubica el componente al borde superior 
+    dense= reduce los bordes
+    reverse=-->
     <v-timeline
       :align-top="alignTop"
       :dense="dense"
-      :reverse="reverse"
     >
+
+      <!-- Elementos del Timeline -->
       <v-timeline-item
-        v-for="n in 3"
+        v-for="n in numberoftweets"
         :key="n"
         :fill-dot="fillDot"
         :hide-dot="hideDot"
-        :icon="icon ? 'mdi-star' : ''"
-        :icon-color=" iconColor ? 'deep-orange' : ''"
-        :left="left"
-        :right="right"
-        :small="small"
+        
       >
+        <!-- Imagen de perfil del usuario (Avatar) -->
         <template v-slot:icon>
           <v-avatar v-if="avatar">
             <a v-bind:href= listoftweets[n].perfilUser ><img :src= listoftweets[n].profileImage ></a>
           </v-avatar>
         </template>
-        <span slot="opposite">Tus eu perfecto</span>
-        <v-card id="card-tweet" class="elevation-2">
+
+        <!-- Card que contiene el tweet y sus elementos (fecha, retweets, likes) -->
+        <v-card 
+        id="card-tweet" 
+        class="elevation-2">
+          
+          <!-- Card-Title: Contiene el nombre de usuario y el nombre real de la persona -->
           <v-card-title class="headline">
             <v-row no-gutters>
               {{ listoftweets[n].realName }}
@@ -30,40 +37,53 @@
               <a style="font-size:17px;" v-bind:href= listoftweets[n].perfilUser >@{{ listoftweets[n].userName }}</a>
             </v-row>
           </v-card-title>
-            <v-card-text>
+
+          <!-- Card-Text-1: Contiene el contenido del tweet -->
+          <v-card-text style="font-size:16px;">
               {{ listoftweets[n].text }}
-            </v-card-text>
+          </v-card-text>
           <v-divider class="my-1"></v-divider>
+          
+          <!-- Card-Text-2: Contiene los elementos del tweet -->
           <v-card-text>
-            <v-icon medium>today</v-icon>
-            <span> {{ listoftweets[n].createdAt }}</span>
-            <v-divider class="mx-4" vertical></v-divider>
-            <v-icon medium>repeat</v-icon>
-            <span> Retweets: {{ listoftweets[n].retweetCount }}</span>
-            <v-divider class="mx-4" vertical></v-divider>
-            <v-icon medium>favorite</v-icon>
-            <span class="mr-16"> Likes: {{ listoftweets[n].favoriteCount }}</span>
-            <v-layout justify-end>
-              <span><v-btn small text> <v-icon medium>read_more</v-icon> Ver más</v-btn></span>
-            </v-layout>
+            <v-row dense style="margin-top:-10px">
+              <v-col cols="10">
+                <v-icon medium>today</v-icon>
+                <span> {{ listoftweets[n].createdAt }}</span>
+                <v-divider class="mx-4" vertical></v-divider>
+                
+                <v-icon medium>repeat</v-icon>
+                <span> Retweets: {{ listoftweets[n].retweetCount }}</span>
+                <v-divider class="mx-4" vertical></v-divider>
+            
+                <v-icon medium>favorite</v-icon>
+                <span class="mr-16"> Likes: {{ listoftweets[n].favoriteCount }}</span>
+              </v-col>
+            
+              <v-col cols="2">
+                <span style="margin-left:30px">
+                  <v-btn small text :href= listoftweets[n].tweetURL > <v-icon medium>read_more</v-icon> Ver más</v-btn>
+                </span>
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-timeline-item>
     </v-timeline>
-  </div>
+  </v-row>
 </template>
 
 <script>
 export default {
   name: 'Tweets',
   props: [
-    "listoftweets"
+    "listoftweets",
+    "numberoftweets",
   ],
+  
     data: () => ({
       avatar: true,
       dense: true,
-      url: '/',
-      url2: '/otraparte',
     }),
 
 }
