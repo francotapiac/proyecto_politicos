@@ -49,7 +49,7 @@
     created () {
       this.$store.commit('SET_LAYOUT', 'layout-dashboard');
       this.leerAPI();
-      console.log("------------------------------ se hizo el created -------------------------------");
+      console.log("¡created() existoso!");
     },
     
     methods: {
@@ -62,13 +62,10 @@
         })
         .catch(error => {
           console.log(error);
-          console.log("------------------------------ Error en el axios -------------------------------");
         });
         this.fixList();
         this.dataIsReady = true;
-        console.log(this.tweetList);
-        console.log("------------------------------ Se hizo correctamente el axios -------------------------------");
-        
+        console.log("¡leerAPI() existoso!");
     },
 
     fixList(){
@@ -77,16 +74,14 @@
           auxDate = this.tweetList[i].createdAt.substring(0,10);
           this.tweetList[i].createdAt = auxDate.split("-").reverse().join("-");
       }
-      console.log("------------------------------ Paso por el fixList -------------------------------");
     }, 
 
     changeNumTweets(Event){
       this.dataIsReady = false;
-      console.log("entra en changeNumTweets");
-        this.numtweets= Event;
-        console.log(this.numtweets);
-        this.dataIsReady = true;
-        //this.leerAPI();
+      this.numtweets= Event;
+      this.dataIsReady = true;
+      console.log("¡changeNumTweets() existoso!");
+      //this.leerAPI();
       }
   
   },
