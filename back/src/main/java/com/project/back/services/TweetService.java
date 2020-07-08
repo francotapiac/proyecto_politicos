@@ -53,7 +53,7 @@ public class TweetService {
     public List<Tweet> searchCount(@PathVariable Integer count){
 
         List<Tweet> tweetSort = this.sortByRetweet();   //Obtiene tweets ordenados según Retweet
-        ArrayList<Tweet> newTweetSort = new ArrayList<Tweet>();
+        List<Tweet> newTweetSort = new ArrayList<Tweet>();
 
         if(count > tweetSort.size()){                   //Revisa que count no exceda el largo de la lista de tweets
             count = tweetSort.size();
@@ -87,29 +87,33 @@ public class TweetService {
                 String tweetURL = this.TweetURL(tweet.getId(),tweet.getUser().getScreenName());
 
                 //Verificación si tweet es Retweet o un tweet.  Esto se hace para obtener el texto completo y no con ...
+                //y para obtener la cantidad de RT por tweet o retweet
                 String tweetText;
+                int retweetCount;
                 //En caso de ser Tweet, se obtiene de getText.
                 if(tweet.getRetweetedStatus() == null){
                     tweetText = tweet.getText();
+                    retweetCount = tweet.getRetweetCount();
                 }
                 // En caso de ser RT, entonces el texto se obtendrá de getRetweetedStatus.
                 else{
                     tweetText = tweet.getRetweetedStatus().getText();
+                    retweetCount = tweet.getRetweetedStatus().getRetweetCount();
                 }
 
 
                 //Se crean los tweets verificando si existen o no las geolocalizaciones y los lugares.
                 if(tweet.getPlace() == null && tweet.getGeoLocation() == null){
-                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
                 }
                 else if(tweet.getPlace() == null){
-                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
                 }
                 else if(tweet.getGeoLocation() == null){
-                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL, "");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL, "");
                 }
                 else{
-                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),tweet.getRetweetCount(),tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
                 }
                 System.out.println("Tweet guardado:" + "@" + tweet.getUser().getScreenName() + ":" + tweetText + " Ruta perfil: " +perfilUser + " Ruta tweet: " +tweetURL);
                 Count++;
