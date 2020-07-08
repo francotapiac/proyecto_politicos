@@ -10,11 +10,12 @@
         app
         clipped
         expand-on-hover
+        fixed
         >
             <!-- Elementos del Sidebar:
             dense = Reduce la altura máxima de los elementos de la lista
             -->
-            <v-list v-for="item in ItemsSideBar" :key="item" dense>
+            <v-list v-for="(item,index) in ItemsSideBar" :key="index" dense>
                 <v-list-item :to=item.route link >
                     <v-list-item-action>
                         <v-icon medium>{{ item.icon }}</v-icon>

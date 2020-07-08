@@ -50,7 +50,7 @@ public class TweetService {
     public List<Tweet> searchCount(@PathVariable Integer count){
         int i;
         List<Tweet> tweetSort = this.sortByRetweet();
-        ArrayList<Tweet> newTweetSort = new ArrayList<Tweet>();
+        List<Tweet> newTweetSort = new ArrayList<Tweet>();
         for(i = 0; i < count; i++){
             newTweetSort.add(tweetSort.get(i));
         }

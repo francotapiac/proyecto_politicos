@@ -21,7 +21,7 @@
         <v-row>
           <v-col>
             <v-divider class="my-3"></v-divider>
-            <tweets :listoftweets= "tweetList" :numberoftweets= "numtweets" ></tweets>
+            <tweets v-if="dataIsReady" :listoftweets= "tweetList" :numberoftweets= "numtweets" ></tweets>
             <v-btn id="btn-back-home" @click="$router.push('/')" large class="mx-0">Volver al Inicio</v-btn>
             </v-col>
         </v-row>
@@ -39,6 +39,7 @@
       tweetList: null,
       numtweets:10,
       dropdown_items: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+      dataIsReady: false,
     }),
     components: {
       Tweets,
@@ -46,23 +47,28 @@
     
     
     created () {
-      this.$store.commit('SET_LAYOUT', 'layout-dashboard')
+      this.$store.commit('SET_LAYOUT', 'layout-dashboard');
       this.leerAPI();
-      
+      console.log("------------------------------ se hizo el created -------------------------------");
     },
     
     methods: {
     async leerAPI() {
+      this.dataIsReady = false;
       await axios
-        .get('http://localhost:8887/tweets/sort/10')
+        .get('http://localhost:8887/tweets/sort/' + this.numtweets.toString())
         .then(response => {
           this.tweetList = response.data;
         })
         .catch(error => {
           console.log(error);
+          console.log("------------------------------ Error en el axios -------------------------------");
         });
         this.fixList();
+        this.dataIsReady = true;
         console.log(this.tweetList);
+        console.log("------------------------------ Se hizo correctamente el axios -------------------------------");
+        
     },
 
     fixList(){
@@ -71,15 +77,17 @@
           auxDate = this.tweetList[i].createdAt.substring(0,10);
           this.tweetList[i].createdAt = auxDate.split("-").reverse().join("-");
       }
-      console.log(this.tweetList[0].createdAt);
-    },
+      console.log("------------------------------ Paso por el fixList -------------------------------");
+    }, 
 
-    async changeNumTweets(Event){
-      this.numtweets= Event;
-      this.leerAPI();
-      
-    }
-  }
+    changeNumTweets(Event){
+      console.log("entra en changeNumTweets");
+        this.numtweets= Event;
+        console.log(this.numtweets);
+        this.leerAPI();
+      }
+  
+  },
 
   }
 </script>
