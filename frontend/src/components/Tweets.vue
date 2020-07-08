@@ -12,14 +12,14 @@
         :fill-dot="fillDot"
         :hide-dot="hideDot"-->
       <v-timeline-item
-        v-for="tweet in listoftweets"
-        :key="tweet.id"
+        v-for="n in numberoftweets"
+        :key="n"
         
       >
         <!-- Imagen de perfil del usuario (Avatar) -->
         <template v-slot:icon>
           <v-avatar v-if="avatar">
-            <a v-bind:href= tweet.perfilUser ><img :src= tweet.profileImage ></a>
+            <a v-bind:href= listoftweets[n].perfilUser ><img :src= listoftweets[n].profileImage ></a>
           </v-avatar>
         </template>
 
@@ -31,15 +31,15 @@
           <!-- Card-Title: Contiene el nombre de usuario y el nombre real de la persona -->
           <v-card-title class="headline">
             <v-row no-gutters>
-              {{ tweet.realName }}
+              {{ listoftweets[n].realName }}
               <v-divider class="mx-4" vertical></v-divider>
-              <a style="font-size:17px;" v-bind:href= tweet.perfilUser >@{{ tweet.userName }}</a>
+              <a style="font-size:17px;" v-bind:href= listoftweets[n].perfilUser >@{{ listoftweets[n].userName }}</a>
             </v-row>
           </v-card-title>
 
           <!-- Card-Text-1: Contiene el contenido del tweet -->
           <v-card-text style="font-size:16px;">
-              {{ tweet.text }}
+              {{ listoftweets[n].text }}
           </v-card-text>
           <v-divider class="my-1"></v-divider>
           
@@ -48,20 +48,20 @@
             <v-row dense style="margin-top:-10px">
               <v-col cols="10">
                 <v-icon medium>today</v-icon>
-                <span> {{ tweet.createdAt }}</span>
+                <span> {{ listoftweets[n].createdAt }}</span>
                 <v-divider class="mx-4" vertical></v-divider>
                 
                 <v-icon medium>repeat</v-icon>
-                <span> Retweets: {{ tweet.retweetCount }}</span>
+                <span> Retweets: {{ listoftweets[n].retweetCount }}</span>
                 <v-divider class="mx-4" vertical></v-divider>
             
                 <v-icon medium>favorite</v-icon>
-                <span class="mr-16"> Likes: {{ tweet.favoriteCount }}</span>
+                <span class="mr-16"> Likes: {{ listoftweets[n].favoriteCount }}</span>
               </v-col>
             
               <v-col cols="2">
                 <span style="margin-left:30px">
-                  <v-btn v-if="listoftweets" small text :href= tweet.tweetURL > <v-icon medium>read_more</v-icon> Ver más</v-btn>
+                  <v-btn v-if="listoftweets" small text :href= listoftweets[n].tweetURL > <v-icon medium>read_more</v-icon> Ver más</v-btn>
                   <v-btn v-else> loading...</v-btn>
                 </span>
               </v-col>

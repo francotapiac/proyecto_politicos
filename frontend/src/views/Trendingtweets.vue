@@ -56,7 +56,7 @@
     async leerAPI() {
       this.dataIsReady = false;
       await axios
-        .get('http://localhost:8887/tweets/sort/' + this.numtweets.toString())
+        .get('http://localhost:8887/tweets/sort/51' /*+ this.numtweets.toString()*/)
         .then(response => {
           this.tweetList = response.data;
         })
@@ -81,10 +81,12 @@
     }, 
 
     changeNumTweets(Event){
+      this.dataIsReady = false;
       console.log("entra en changeNumTweets");
         this.numtweets= Event;
         console.log(this.numtweets);
-        this.leerAPI();
+        this.dataIsReady = true;
+        //this.leerAPI();
       }
   
   },
