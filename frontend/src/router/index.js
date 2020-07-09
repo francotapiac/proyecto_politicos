@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import TrendingTweets from '../views/Trendingtweets.vue'
+import PoliticaslApproval from '../views/PoliticalsApproval.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ Vue.use(VueRouter)
     path: '/trendingtweets',
     name: 'Trendingtweets',
     component: TrendingTweets  
+  },
+  {
+    path: '/politicaslApproval',
+    name: 'PoliticaslApproval',
+    component: PoliticaslApproval  
   },
   {
     path: '/about',

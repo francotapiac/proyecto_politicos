@@ -10,12 +10,14 @@
         app
         clipped
         expand-on-hover
+        fixed
         >
             <!-- Elementos del Sidebar:
             dense = Reduce la altura máxima de los elementos de la lista
             -->
-            <v-list v-for="item in ItemsSideBar" :key="item" dense>
-                <v-list-item :to=item.route link >
+            <v-list v-for="(item,index) in ItemsSideBar" :key="index" dense>
+                <!-- Si no es una subcategoria -->
+                <v-list-item v-if="!item.subItems" :to=item.route link >
                     <v-list-item-action>
                         <v-icon medium>{{ item.icon }}</v-icon>
                     </v-list-item-action>
@@ -23,6 +25,26 @@
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <!-- Si es una subcategoria -->
+                <v-list-group v-else :key="item.title" no-action>
+                     <!-- Se crea botón con slot los subitems -->
+                    <template v-slot:activator>
+                        <v-list-item-action>
+                            <v-icon medium>{{ item.icon }}</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        </v-list-item-content>
+                    </template>
+                    <v-list-item v-for="(subItem,i) in item.subItems" :key="i" :to= "subItem.route" > 
+                        <v-list-item-action>
+                            <v-icon medium>{{ subItem.icon }}</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ subItem.title }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list-group>
             </v-list>
         </v-navigation-drawer>
 
@@ -57,16 +79,28 @@
       source: String,
     },
     data: () => ({
-      drawer: false,
-      ItemsSideBar: [
-          {title: "Home",
-           route: '/',
-           icon: 'home'},
+        drawer: false,
+        ItemsSideBar: [
+            {title: "Home",
+            route: '/',
+            icon: 'home',
+            },
           
-          {title: "Trending Tweets",
-           route: '/trendingtweets',
-           icon: 'trending_up'},
-           
+            {title: "Trending Tweets",
+            route: '/trendingtweets',
+            icon: 'trending_up',
+           },
+
+            {title: 'Politicians',
+            icon:'how_to_reg',
+            subItems: [
+                {title: 'Graphics',
+                 route: '/politicaslApproval',
+                 icon:  'bar_chart'
+                }
+
+            ] 
+            }
       ]
     }),
     created () {
