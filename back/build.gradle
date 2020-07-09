@@ -1,0 +1,44 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+}
+
+group = 'com.project'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    runtimeOnly 'com.h2database:h2'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    testImplementation 'io.projectreactor:reactor-test'
+
+    compile('mysql:mysql-connector-java:5.1.35')
+    compile group: 'org.twitter4j', name: 'twitter4j-stream', version: '4.0.7'
+    implementation 'org.twitter4j:twitter4j-core:4.0.7'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '2.3.1.RELEASE'
+
+
+
+
+
+}
+
+test {
+    useJUnitPlatform()
+}
