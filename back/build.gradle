@@ -33,7 +33,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
     compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '2.3.1.RELEASE'
 
-
+    // https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-corenlp
+    compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '4.0.0'
 
 
 

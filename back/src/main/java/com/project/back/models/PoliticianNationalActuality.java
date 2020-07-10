@@ -8,11 +8,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="politician_national_actuality")
-public class PolicitianNationalActuality {
+public class PoliticianNationalActuality {
 
     //Atributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_politician", nullable = false)

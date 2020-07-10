@@ -3,6 +3,7 @@ package com.project.back.services;
 import com.project.back.models.NationalActuality;
 import com.project.back.models.Tweet;
 import com.project.back.repositories.TweetRepository;
+import com.project.back.sentimentAnalysis.NLP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,15 @@ public class TweetService {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Tweet> getAllTweets(){
-        return tweetRepository.findAll();
+        List<Tweet> tweets = tweetRepository.findAll();
+        NLP.init();
+        //for(Tweet tweet : tweets) {
+        for (int i = 0; i < tweets.size(); i++) {
+            String text = tweets.get(i).getText();
+            System.out.println(text + " : " + NLP.findSentiment(text));
+            System.out.println("\n");
+        }
+        return tweets;
     }
 
     //Retorna una lista ordenada según Retweet de todos los tweet
