@@ -94,10 +94,14 @@
             {title: 'Politicians',
             icon:'how_to_reg',
             subItems: [
-                {title: 'Graphics',
-                 route: '/politicaslApproval',
+                {title: 'Approval Graph',
+                 route: '/chartslApproval',
                  icon:  'bar_chart'
-                }
+                },
+                {title: 'Ranking',
+                 route: '/ccjnsRankings',
+                 icon:  'bar_chart'
+                },
 
             ] 
             }
