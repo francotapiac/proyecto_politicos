@@ -40,10 +40,21 @@ public class TweetService {
     public List<Tweet> getAllTweets(){
         List<Tweet> tweets = tweetRepository.findAll();
         NLP.init();
+        //1: negativo
+        //2: neutral
+        //3: positivo
+
         //for(Tweet tweet : tweets) {
         for (int i = 0; i < tweets.size(); i++) {
             String text = tweets.get(i).getText();
-            System.out.println(text + " : " + NLP.findSentiment(text));
+            int sentiment = NLP.findSentiment(text);
+            if(sentiment == 1)
+                System.out.println(text + " : " + "negativo");
+            else if(sentiment == 2)
+                System.out.println(text + " : " + "neutral");
+            else
+                System.out.println(text + " : " + "positivo");
+
             System.out.println("\n");
         }
         return tweets;
