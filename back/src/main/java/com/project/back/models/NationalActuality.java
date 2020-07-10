@@ -3,7 +3,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="national")
+@Table(name="national_actuality")
 public class NationalActuality {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,9 +13,6 @@ public class NationalActuality {
     private String name;
     @Column(name = "description", nullable = false)
     private String description;
-    @Column(name = "cantidad", nullable = false)
-    private Integer cantidad;
-
 
     //Covid
     //Lluvia
@@ -43,13 +40,5 @@ public class NationalActuality {
 
     public void setDescription(String description){
         this.description = description;
-    }
-
-    public Integer getCantidad(){
-        return this.cantidad;
-    }
-
-    public void setCantidad(Integer cantidad){
-        this.cantidad = cantidad;
     }
 }
