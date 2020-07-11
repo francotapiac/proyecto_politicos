@@ -1,25 +1,15 @@
 package com.project.back.services;
 
-import com.project.back.models.NationalActuality;
 import com.project.back.models.Tweet;
 import com.project.back.repositories.TweetRepository;
-import com.project.back.sentimentAnalysis.NLP;
+import com.project.back.sentimentAnalysis.SentimentAnalyzer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import twitter4j.*;
-import twitter4j.TwitterStream;
-import twitter4j.StatusListener;
 
-import javax.annotation.PostConstruct;
+import java.util.*;
 
 
 @CrossOrigin
@@ -31,6 +21,7 @@ public class TweetService {
 
     @Autowired
     private Twitter twitter;
+    private SentimentAnalyzer sentimentAnalyzer;
 
    // TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
 
@@ -38,26 +29,11 @@ public class TweetService {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Tweet> getAllTweets(){
-        List<Tweet> tweets = tweetRepository.findAll();
-        NLP.init();
-        //1: negativo
-        //2: neutral
-        //3: positivo
-
-        //for(Tweet tweet : tweets) {
-        for (int i = 0; i < tweets.size(); i++) {
-            String text = tweets.get(i).getText();
-            int sentiment = NLP.findSentiment(text);
-            if(sentiment == 1)
-                System.out.println(text + " : " + "negativo");
-            else if(sentiment == 2)
-                System.out.println(text + " : " + "neutral");
-            else
-                System.out.println(text + " : " + "positivo");
-
-            System.out.println("\n");
-        }
-        return tweets;
+        String text_ejemplo = "Odio al Presidente y lo quiero matar";
+        sentimentAnalyzer = new SentimentAnalyzer();
+        HashMap<String, Double> clasificacion = sentimentAnalyzer.getClasification(text_ejemplo);
+        clasificacion.forEach((k,v) -> System.out.println("Key: " + k + ": Value: " + v));
+        return tweetRepository.findAll();
     }
 
     //Retorna una lista ordenada según Retweet de todos los tweet
