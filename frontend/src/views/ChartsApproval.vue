@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import SpecificChart from '@/components/politicals/specificChart.vue';
+import SpecificChart from '../components/politicals/specificChart.vue';
 export default {
     components: {
       SpecificChart,

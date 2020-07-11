@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import TrendingTweets from '../views/Trendingtweets.vue'
-import ChartslApproval from '../views/ChartsApproval.vue'
+import ChartsApproval from '../views/ChartsApproval.vue'
+import Ranking from '../views/Ranking.vue'
 
 Vue.use(VueRouter)
 
@@ -18,9 +19,14 @@ Vue.use(VueRouter)
     component: TrendingTweets  
   },
   {
-    path: '/chartslApproval',
-    name: 'ChartslApproval',
-    component: ChartslApproval  
+    path: '/chartsApproval',
+    name: 'ChartsApproval',
+    component: ChartsApproval  
+  },
+  {
+    path: '/rankings',
+    name: 'Ranking',
+    component: Ranking  
   },
   {
     path: '/about',

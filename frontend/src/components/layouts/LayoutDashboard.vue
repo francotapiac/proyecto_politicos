@@ -95,11 +95,11 @@
             icon:'how_to_reg',
             subItems: [
                 {title: 'Approval Graph',
-                 route: '/chartslApproval',
-                 icon:  'bar_chart'
+                 route: '/chartsApproval',
+                 icon:  'show_chart'
                 },
                 {title: 'Ranking',
-                 route: '/ccjnsRankings',
+                 route: '/rankings',
                  icon:  'bar_chart'
                 },
 
