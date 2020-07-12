@@ -4,6 +4,7 @@ import com.project.back.models.Tweet;
 import com.project.back.repositories.TweetRepository;
 import com.project.back.sentimentAnalysis.SentimentAnalyzer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,12 +13,14 @@ import twitter4j.*;
 import twitter4j.StatusListener;
 import twitter4j.TwitterStream;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 
 @CrossOrigin
 @RestController
 @RequestMapping("/tweets")
+@Configurable
 public class TweetService {
    @Autowired
     private TweetRepository tweetRepository;
@@ -68,22 +71,17 @@ public class TweetService {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public void run(){
         twitterStream.addListener(new StatusListener(){
             public void onStatus(Status tweet) {
                 TweetService tweetService = new TweetService();
-                System.out.println(tweet.getText());
                 HashMap<String, Double> analyzedText = sentimentAnalyzer.getClasification(tweet.getText());
                 double negative = analyzedText.get("negative");
                 double positive = analyzedText.get("positive");
-                System.out.println("Negative= "+ negative + "   Positive= "+ positive+"\n\n\n");
-
                 String perfilUser = tweetService.perfilUser(tweet.getUser().getScreenName());
                 //Obtención de ruta de twitter
                 String tweetURL = tweetService.TweetURL(tweet.getId(),tweet.getUser().getScreenName());
-
                 //Verificación si tweet es Retweet o un tweet.  Esto se hace para obtener el texto completo y no con ...
                 //y para obtener la cantidad de RT por tweet o retweet
                 String tweetText;
@@ -101,26 +99,34 @@ public class TweetService {
 
                 //Se crean los tweets verificando si existen o no las geolocalizaciones y los lugares.
                 if(tweet.getPlace() == null && tweet.getGeoLocation() == null){
-                    tweetService.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
                     System.out.println("111111111111111111111111");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
+
                 }
                 else if(tweet.getPlace() == null){
-                    tweetService.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
                     System.out.println("222222222222222222222222");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
+
                 }
                 else if(tweet.getGeoLocation() == null){
-                    tweetService.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL, "");
                     System.out.println("333333333333333333333333");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL, "");
+
                 }
                 else{
-                    tweetService.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
                     System.out.println("44444444444444444444444");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
+
                 }
                 System.out.println("555555555555555555555555555");
                 System.out.println("Tweet guardado:" + "@" + tweet.getUser().getScreenName() + ":" + tweetText + " Ruta perfil: " +perfilUser + " Ruta tweet: " +tweetURL);
 
             }
 
+            //Método craete debe estar dentro del ambiente de StatusListener para poder ser utilizado. Esto ocurre solamente con esta forma de lectura de tweets
+            private Tweet create(long tweetId, String text, Date createdAt, double latitude, double longitude, String city, String country, long userId, String userName, int followersCount, int retweetCount,String realName, int favoriteCount,String profileImage,String perfilUser, String tweetURL,String sentimentAnalysis) {
+                return tweetRepository.save(new Tweet(tweetId, text, createdAt, latitude, longitude, city, country, userId, userName, followersCount, retweetCount, realName, favoriteCount,profileImage,perfilUser,tweetURL,sentimentAnalysis));
+            }
             @Override
             public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
 
@@ -153,6 +159,7 @@ public class TweetService {
         filter.language(new String[]{"es"});
         twitterStream.filter(filter);
     }
+
 
 
 /*
@@ -221,9 +228,6 @@ public class TweetService {
         System.exit(0);
     }
 */
-    public Tweet create(long tweetId, String text, Date createdAt, double latitude, double longitude, String city, String country, long userId, String userName, int followersCount, int retweetCount,String realName, int favoriteCount,String profileImage,String perfilUser, String tweetURL,String sentimentAnalysis) {
-        return tweetRepository.save(new Tweet(tweetId, text, createdAt, latitude, longitude, city, country, userId, userName, followersCount, retweetCount, realName, favoriteCount,profileImage,perfilUser,tweetURL,sentimentAnalysis));
-    }
 
     public String perfilUser(String userName){
         return "https://twitter.com/" + userName;
