@@ -14,7 +14,7 @@ public class SentimentAnalyzer {
 
     //Methods
     public HashMap<String, Double> getClasification(String text){
-        sentimentClassifier = new SentimentClassifier();
+        //sentimentClassifier = new SentimentClassifier();
         return this.sentimentClassifier.classify(text);
     }
 

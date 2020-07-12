@@ -52,7 +52,6 @@ public class SentimentClassifier {
     }
     public HashMap<String,Double> classify(String tweet){
         String[] words=tweet.replaceAll("[^A-Za-z]"," ").split(" ");
-        this.categorizer=new DocumentCategorizerME(this.model);
         double[] prob=categorizer.categorize(words);
 
         HashMap<String,Double> result=new HashMap<String,Double>();

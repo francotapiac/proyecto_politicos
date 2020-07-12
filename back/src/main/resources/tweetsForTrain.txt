@@ -122926,3 +122926,4 @@ positive	@PeraltaMichel Hola Michel! Debes esperar 24 horas para canjear tu cód
 negative	@LoreAttwell te estas tardando mañana es mi ultimo día :(
 negative	:-( #AFM sentido Petare. Cola Fuerte en El Rosal,La Floresta,Parque Generalísimo Francisco de Miranda,Campo Claro
 negative	Noo tomo mas no salgo mas noo noo noo y noo :(( o.o
+negative    Odio al Presidente y lo mataré hoy

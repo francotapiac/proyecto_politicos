@@ -4,6 +4,7 @@ import com.project.back.models.Tweet;
 import com.project.back.repositories.TweetRepository;
 import com.project.back.sentimentAnalysis.SentimentAnalyzer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,11 @@ import java.util.*;
 public class TweetService {
    @Autowired
     private TweetRepository tweetRepository;
-
+    @Autowired
+    private ResourceLoader resourceLoader;
     @Autowired
     private Twitter twitter;
+    @Autowired
     private SentimentAnalyzer sentimentAnalyzer;
 
    // TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
@@ -29,8 +32,7 @@ public class TweetService {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Tweet> getAllTweets(){
-        String text_ejemplo = "Odio al Presidente y lo quiero matar";
-        sentimentAnalyzer = new SentimentAnalyzer();
+        String text_ejemplo = "Odio al Presidente y lo mataré hoy";
         HashMap<String, Double> clasificacion = sentimentAnalyzer.getClasification(text_ejemplo);
         clasificacion.forEach((k,v) -> System.out.println("Key: " + k + ": Value: " + v));
         return tweetRepository.findAll();
