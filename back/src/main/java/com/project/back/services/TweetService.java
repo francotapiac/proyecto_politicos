@@ -6,14 +6,10 @@ import com.project.back.sentimentAnalysis.SentimentAnalyzer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.*;
 import twitter4j.*;
-import twitter4j.StatusListener;
-import twitter4j.TwitterStream;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 
@@ -40,8 +36,8 @@ public class TweetService {
     @ResponseBody
     public List<Tweet> getAllTweets(){
         String text_ejemplo = "Odio al Presidente y lo mataré hoy";
-        HashMap<String, Double> clasificacion = sentimentAnalyzer.getClasification(text_ejemplo);
-        clasificacion.forEach((k,v) -> System.out.println("Key: " + k + ": Value: " + v));
+        String clasificacion = sentimentAnalyzer.getClasification(text_ejemplo);
+        System.out.println("Clasificacion= "+ clasificacion);
         return tweetRepository.findAll();
     }
 
@@ -76,9 +72,8 @@ public class TweetService {
         twitterStream.addListener(new StatusListener(){
             public void onStatus(Status tweet) {
                 TweetService tweetService = new TweetService();
-                HashMap<String, Double> analyzedText = sentimentAnalyzer.getClasification(tweet.getText());
-                double negative = analyzedText.get("negative");
-                double positive = analyzedText.get("positive");
+                String analyzedText = sentimentAnalyzer.getClasification(tweet.getText());
+
                 String perfilUser = tweetService.perfilUser(tweet.getUser().getScreenName());
                 //Obtención de ruta de twitter
                 String tweetURL = tweetService.TweetURL(tweet.getId(),tweet.getUser().getScreenName());
@@ -99,26 +94,21 @@ public class TweetService {
 
                 //Se crean los tweets verificando si existen o no las geolocalizaciones y los lugares.
                 if(tweet.getPlace() == null && tweet.getGeoLocation() == null){
-                    System.out.println("111111111111111111111111");
-                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,analyzedText);
 
                 }
                 else if(tweet.getPlace() == null){
-                    System.out.println("222222222222222222222222");
-                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,analyzedText);
 
                 }
                 else if(tweet.getGeoLocation() == null){
-                    System.out.println("333333333333333333333333");
-                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL, "");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL, analyzedText);
 
                 }
                 else{
-                    System.out.println("44444444444444444444444");
-                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,"");
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,analyzedText);
 
                 }
-                System.out.println("555555555555555555555555555");
                 System.out.println("Tweet guardado:" + "@" + tweet.getUser().getScreenName() + ":" + tweetText + " Ruta perfil: " +perfilUser + " Ruta tweet: " +tweetURL);
 
             }
@@ -153,7 +143,7 @@ public class TweetService {
             }
 
         });
-        String[] bow = {"piñera","udi","gobierno"};
+        String[] bow = {"piñera","lavin","jadue","ximena rincon"};
         FilterQuery filter = new FilterQuery();
         filter.track(bow);
         filter.language(new String[]{"es"});
