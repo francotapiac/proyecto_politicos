@@ -118,6 +118,9 @@ public class Politician {
     * */
     public Float calculateApprobation(Integer total, Integer positive, Integer verypositive){
         Integer totalPositive = positive + verypositive;
+        if(total == 0.0){
+            return (float) total;
+        }
         Float approbation = (float) ((totalPositive * 100) / total);
         return approbation;
     }

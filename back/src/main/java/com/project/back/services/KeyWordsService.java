@@ -81,20 +81,5 @@ public class KeyWordsService {
             listId.clear();
             listSentiment.clear();
         }
-        /*
-        //guardar index en la base de datos
-        List<Long> listId = new ArrayList<>();
-        List<String> listSentiment = new ArrayList<>();
-        for (Map.Entry<String, HashMap<Long, String>> entry : result.entrySet()){
-            for (Map.Entry<Long, String> entry2 : entry.getValue().entrySet()){
-                listId.add(entry2.getKey());
-                listSentiment.add(entry2.getValue());
-            }
-            this.invertedIndexRepository.save(new InvertedIndex(entry.getKey(),listId,listSentiment));
-            listId.clear();
-            listSentiment.clear();
-        }
-
-         */
     }
 }

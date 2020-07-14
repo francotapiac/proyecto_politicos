@@ -1,6 +1,8 @@
 package com.project.back.services;
 
+import com.project.back.models.Politician;
 import com.project.back.models.Tweet;
+import com.project.back.repositories.PoliticianRepository;
 import com.project.back.repositories.TweetRepository;
 import com.project.back.sentimentAnalysis.SentimentAnalyzer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class TweetService {
     private SentimentAnalyzer sentimentAnalyzer;
     @Autowired
     private TwitterStream twitterStream;
+    @Autowired
+    private PoliticianRepository politicianRepository;
 
    // TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
 
@@ -143,7 +147,15 @@ public class TweetService {
             }
 
         });
-        String[] bow = {"piñera","lavin","jadue","ximena rincon"};
+        String[] bow=null;
+        List<Politician> politicians = politicianRepository.findAll();
+        List<String> lines=new ArrayList<String>();
+        for(Politician politician : politicians){
+            lines.add(politician.getAkaName());
+        }
+        bow=lines.toArray(new String[0]);
+
+        //String[] bow = {"piñera","lavin","jadue","ximena rincon"};
         FilterQuery filter = new FilterQuery();
         filter.track(bow);
         filter.language(new String[]{"es"});

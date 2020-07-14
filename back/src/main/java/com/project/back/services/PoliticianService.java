@@ -35,15 +35,16 @@ public class PoliticianService {
         Float approbation = (float) 0;
         //para cada politico
         for (Politician politician : politicians){
-            //obtener los sentimientos
+
             String akaName = politician.getAkaName();
             List<InvertedIndex> indexes = invertedIndexRepository.findByName(akaName);
             if(indexes != null){
                 InvertedIndex index = indexes.get(0);
                 //Calcular Aprobacion
                 approbation = politician.calculateApprobation(index.getTotalTweets(),
-                        index.getTotalPositiveTweets(),
-                        index.getTotalVeryPositiveTweets());
+                                                                index.getTotalPositiveTweets(),
+                                                                index.getTotalVeryPositiveTweets());
+
                 politician.setCountNegative(index.getTotalNegativeTweets());
                 politician.setCountVeryNegative(index.getTotalVeryNegativeTweets());
                 politician.setCountPositive(index.getTotalPositiveTweets());
