@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 @Configuration
-@ConditionalOnClass({ TwitterFactory.class, Twitter.class })
+@ConditionalOnClass({ TwitterFactory.class, Twitter.class, TwitterStreamFactory.class,TwitterStream.class })
 @EnableConfigurationProperties(Twitter4jProperties.class)
 public class Twitter4jAutoConfiguration {
     private static Log log = LogFactory.getLog(Twitter4jAutoConfiguration.class);
@@ -22,7 +24,7 @@ public class Twitter4jAutoConfiguration {
     private Twitter4jProperties properties;
     @Bean
     @ConditionalOnMissingBean
-    public TwitterFactory twitterFactory(){
+    public TwitterStreamFactory twitterStreamFactoryFactory(){
         if (this.properties.getOauth().getConsumerKey() == null
                 || this.properties.getOauth().getConsumerSecret() == null
                 || this.properties.getOauth().getAccessToken() == null
@@ -41,14 +43,20 @@ public class Twitter4jAutoConfiguration {
                 .setOAuthConsumerSecret(properties.getOauth().getConsumerSecret())
                 .setOAuthAccessToken(properties.getOauth().getAccessToken())
                 .setOAuthAccessTokenSecret(properties.getOauth().getAccessTokenSecret());
-        TwitterFactory tf = new TwitterFactory(cb.build());
+        TwitterStreamFactory tf = new TwitterStreamFactory(cb.build());
         return tf;
     }
-
+    /*
     @Bean
     @ConditionalOnMissingBean
     public Twitter twitter(TwitterFactory twitterFactory){
         return twitterFactory.getInstance();
+    }
+*/
+    @Bean
+    @ConditionalOnMissingBean
+    public TwitterStream twitterStream(TwitterStreamFactory twitterStreamFactory) {
+        return twitterStreamFactory.getInstance();
     }
 
 }

@@ -1,10 +1,13 @@
 package com.project.back.services;
 
+import com.project.back.models.Politician;
 import com.project.back.models.Tweet;
+import com.project.back.repositories.PoliticianRepository;
 import com.project.back.repositories.TweetRepository;
 import com.project.back.sentimentAnalysis.SentimentAnalyzer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.*;
 import twitter4j.*;
@@ -15,13 +18,20 @@ import java.util.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/tweets")
+@Configurable
 public class TweetService {
    @Autowired
     private TweetRepository tweetRepository;
-
     @Autowired
+    private ResourceLoader resourceLoader;
+    //@Autowired
     private Twitter twitter;
+    @Autowired
     private SentimentAnalyzer sentimentAnalyzer;
+    @Autowired
+    private TwitterStream twitterStream;
+    @Autowired
+    private PoliticianRepository politicianRepository;
 
    // TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
 
@@ -29,10 +39,9 @@ public class TweetService {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Tweet> getAllTweets(){
-        String text_ejemplo = "Odio al Presidente y lo quiero matar";
-        sentimentAnalyzer = new SentimentAnalyzer();
-        HashMap<String, Double> clasificacion = sentimentAnalyzer.getClasification(text_ejemplo);
-        clasificacion.forEach((k,v) -> System.out.println("Key: " + k + ": Value: " + v));
+        String text_ejemplo = "Odio al Presidente y lo mataré hoy";
+        String clasificacion = sentimentAnalyzer.getClasification(text_ejemplo);
+        System.out.println("Clasificacion= "+ clasificacion);
         return tweetRepository.findAll();
     }
 
@@ -61,6 +70,101 @@ public class TweetService {
         return newTweetSort;
     }
 
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
+    public void run(){
+        twitterStream.addListener(new StatusListener(){
+            public void onStatus(Status tweet) {
+                TweetService tweetService = new TweetService();
+                String analyzedText = sentimentAnalyzer.getClasification(tweet.getText());
+
+                String perfilUser = tweetService.perfilUser(tweet.getUser().getScreenName());
+                //Obtención de ruta de twitter
+                String tweetURL = tweetService.TweetURL(tweet.getId(),tweet.getUser().getScreenName());
+                //Verificación si tweet es Retweet o un tweet.  Esto se hace para obtener el texto completo y no con ...
+                //y para obtener la cantidad de RT por tweet o retweet
+                String tweetText;
+                int retweetCount;
+                //En caso de ser Tweet, se obtiene de getText.
+                if(tweet.getRetweetedStatus() == null){
+                    tweetText = tweet.getText();
+                    retweetCount = tweet.getRetweetCount();
+                }
+                // En caso de ser RT, entonces el texto se obtendrá de getRetweetedStatus.
+                else{
+                    tweetText = tweet.getRetweetedStatus().getText();
+                    retweetCount = tweet.getRetweetedStatus().getRetweetCount();
+                }
+
+                //Se crean los tweets verificando si existen o no las geolocalizaciones y los lugares.
+                if(tweet.getPlace() == null && tweet.getGeoLocation() == null){
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,analyzedText);
+
+                }
+                else if(tweet.getPlace() == null){
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),"","",tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,analyzedText);
+
+                }
+                else if(tweet.getGeoLocation() == null){
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),0,0,tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL, analyzedText);
+
+                }
+                else{
+                    this.create(tweet.getId(),tweetText,tweet.getCreatedAt(),tweet.getGeoLocation().getLatitude(),tweet.getGeoLocation().getLongitude(),tweet.getPlace().getName(),tweet.getPlace().getCountry(),tweet.getUser().getId(),tweet.getUser().getScreenName(),tweet.getUser().getFollowersCount(),retweetCount,tweet.getUser().getName(),tweet.getFavoriteCount(),tweet.getUser().getProfileImageURLHttps(),perfilUser,tweetURL,analyzedText);
+
+                }
+                System.out.println("Tweet guardado:" + "@" + tweet.getUser().getScreenName() + ":" + tweetText + " Ruta perfil: " +perfilUser + " Ruta tweet: " +tweetURL);
+
+            }
+
+            //Método craete debe estar dentro del ambiente de StatusListener para poder ser utilizado. Esto ocurre solamente con esta forma de lectura de tweets
+            private Tweet create(long tweetId, String text, Date createdAt, double latitude, double longitude, String city, String country, long userId, String userName, int followersCount, int retweetCount,String realName, int favoriteCount,String profileImage,String perfilUser, String tweetURL,String sentimentAnalysis) {
+                return tweetRepository.save(new Tweet(tweetId, text, createdAt, latitude, longitude, city, country, userId, userName, followersCount, retweetCount, realName, favoriteCount,profileImage,perfilUser,tweetURL,sentimentAnalysis));
+            }
+            @Override
+            public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+
+            }
+
+            @Override
+            public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+
+            }
+
+            @Override
+            public void onScrubGeo(long userId, long upToStatusId) {
+
+            }
+
+            @Override
+            public void onStallWarning(StallWarning warning) {
+
+            }
+
+            @Override
+            public void onException(Exception ex) {
+
+            }
+
+        });
+        String[] bow=null;
+        List<Politician> politicians = politicianRepository.findAll();
+        List<String> lines=new ArrayList<String>();
+        for(Politician politician : politicians){
+            lines.add(politician.getAkaName());
+        }
+        bow=lines.toArray(new String[0]);
+
+        //String[] bow = {"piñera","lavin","jadue","ximena rincon"};
+        FilterQuery filter = new FilterQuery();
+        filter.track(bow);
+        filter.language(new String[]{"es"});
+        twitterStream.filter(filter);
+    }
+
+
+
+/*
     //Entrega una lista de tweets según una lista de palabras
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
@@ -125,10 +229,7 @@ public class TweetService {
         System.out.println(Count);
         System.exit(0);
     }
-
-    public Tweet create(long tweetId, String text, Date createdAt, double latitude, double longitude, String city, String country, long userId, String userName, int followersCount, int retweetCount,String realName, int favoriteCount,String profileImage,String perfilUser, String tweetURL,String sentimentAnalysis) {
-        return tweetRepository.save(new Tweet(tweetId, text, createdAt, latitude, longitude, city, country, userId, userName, followersCount, retweetCount, realName, favoriteCount,profileImage,perfilUser,tweetURL,sentimentAnalysis));
-    }
+*/
 
     public String perfilUser(String userName){
         return "https://twitter.com/" + userName;
@@ -144,6 +245,14 @@ public class TweetService {
                 .reversed()
         );
         return  tweetSort;
+    }
+
+    public TwitterStream getTwitterStream() {
+        return twitterStream;
+    }
+
+    public void setTwitterStream(TwitterStream twitterStream) {
+        this.twitterStream = twitterStream;
     }
 
 }
