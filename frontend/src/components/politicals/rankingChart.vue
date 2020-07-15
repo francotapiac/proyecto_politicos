@@ -10,8 +10,10 @@
 
 <script>
 import VueApexCharts from "vue-apexcharts";
-import store from '@/store/index';
 import axios from 'axios';
+import store from '@/store/index';
+import {mapGetters, mapState} from "vuex";
+
 export default {
     name: 'rankingChart',
     components: {
@@ -94,42 +96,36 @@ export default {
       }
     },
 
-    methods: {
-          async updateRankig(){
-            try{
-              await axios.get('http://localhost:3000/rankingPoliticals')
-                .then(res=>{
-                  let nameList =  this.listNameFilter(res.data);
-                  let approbation = this.listApprobattionFilter(res.data);
-                  //Asignando a lista de nombres variable de data chartOptions
-                  this.chartOptions = {
-                    xaxis: {
-                      categories: nameList
-                    },
-                  }
-                  //Asignando la lista de aprobación a variable data de serie
-                  this.series = [{
-                    data: approbation
-                  }]
-                })
-            }catch{
-              console.log("Error")
-            }
-          },
+    methods:{
+      updatePoliticalRankig(){
+        let listsPoliticalRankings = this.getListsPoliticalNameRankings
+        let listsApprobationRankings = this.getListsPoliticalApprobationRankings
+        //Asigna el valor de la aprobación de cada politico al gráfico
+        this.series= [{
+         
+          data:listsApprobationRankings
+        }]
 
-          listNameFilter(data){
-            return data.map(item => item.name);
-          },
-
-          listApprobattionFilter(data){
-            return data.map(item => item.approbation);
+        //Asigna el nombre de cada politico al gráfico
+        this.chartOptions = {
+          xaxis :{
+              categories: listsPoliticalRankings
           }
-        },
-        
-        created(){
-           console.log("approbation")
-          this.updateRankig()
+          
         }
+      }
+    },
+
+    mounted(){
+      this.updatePoliticalRankig()
+    },
+
+    //Propiedad computada que obtiene los datos del store respecto a los politicos
+    computed: {
+      ...mapGetters(['getListsPoliticalNameRankings','getListsPoliticalApprobationRankings'])
+    }
+
+
 }
 </script>
 

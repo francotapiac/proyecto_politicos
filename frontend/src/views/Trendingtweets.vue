@@ -56,7 +56,7 @@
     async leerAPI() {
       this.dataIsReady = false;
       await axios
-        .get('http://localhost:8887/tweets/sort/51' /*+ this.numtweets.toString()*/)
+        .get('http://localhost:8889/tweets/sort/51' /*+ this.numtweets.toString()*/)
         .then(response => {
           this.tweetList = response.data;
         })
