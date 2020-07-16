@@ -1,4 +1,5 @@
 <template>
+  
      <apexcharts 
         width="100%"
         height="350"
@@ -49,7 +50,7 @@ export default {
               colors: ['#fff']
             },
             formatter: function (val, opt) {
-              return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
+              return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val + "%"
             },
             offsetX: 0,
             dropShadow: {
@@ -87,7 +88,7 @@ export default {
             y: {
               title: {
                 formatter: function () {
-                  return 'cantidad'
+                  return 'Aprobación'
                 },
               }
             }
@@ -98,8 +99,10 @@ export default {
 
     methods:{
       updatePoliticalRankig(){
-        let listsPoliticalRankings = this.getListsPoliticalNameRankings
-        let listsApprobationRankings = this.getListsPoliticalApprobationRankings
+       
+        let listsPoliticalRankings = this.getListsPoliticalRankings.map(item => item.realName).slice(0,5)
+        let listsApprobationRankings = this.getListsPoliticalRankings.map(item => item.aprobation).slice(0,5)
+
         //Asigna el valor de la aprobación de cada politico al gráfico
         this.series= [{
          
@@ -113,8 +116,9 @@ export default {
           }
           
         }
-      }
+      },
     },
+    
 
     mounted(){
       this.updatePoliticalRankig()
@@ -122,7 +126,7 @@ export default {
 
     //Propiedad computada que obtiene los datos del store respecto a los politicos
     computed: {
-      ...mapGetters(['getListsPoliticalNameRankings','getListsPoliticalApprobationRankings'])
+      ...mapGetters(['getListsPoliticalRankings'])
     }
 
 

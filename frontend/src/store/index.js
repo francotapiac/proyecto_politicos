@@ -12,8 +12,10 @@ export default new Vuex.Store({
 
     politicalRanking: {
       listOfPoliticians: null,
-      listOfApprobations: null,
       estado: false
+    },
+    politicianSpecific: {
+      politician: null, 
     }
   },
 
@@ -27,11 +29,14 @@ export default new Vuex.Store({
       console.log("3: mutation")
 
       state.politicalRanking.listOfPoliticians = lists.listOfPoliticians,
-      state.politicalRanking.listOfApprobations = lists.listOfApprobations,
       //Se activa componente
       state.politicalRanking.estado = true
-      console.log("lista de politicos: " + state.politicalRanking.listOfPoliticians)
-      console.log("lista de aprobaciones: " + state.politicalRanking.listOfApprobations)
+    },
+
+    SET_POLITICIAN (state, item){
+      state.politicianSpecific.estado = false
+      state.politicianSpecific.politician = item.politician
+      state.politicianSpecific.estado = true
     }
 
   },
@@ -42,11 +47,11 @@ export default new Vuex.Store({
     //Context hace referencia al store para llamar a las mutations
     async updatePoliticalRankingAction({commit}){
       console.log("2: action"),
-      await axios.get('http://localhost:3000/rankingPoliticals')
+      await axios.get('http://localhost:8889/politician/ranking')
         .then(res=>{
-          commit('SET_RANKING',{listOfPoliticians:res.data.map(item => item.name),listOfApprobations:res.data.map(item => item.approbation)})
-      })
-    }
+          commit('SET_RANKING',{listOfPoliticians: res.data}) //Se envia json con politicos y sus atributo
+        })
+      }
   },
 
   modules: {
@@ -54,12 +59,11 @@ export default new Vuex.Store({
 
   //Obtienen los states
   getters:{
-    getListsPoliticalNameRankings(state){
+    getListsPoliticalRankings(state){
       return state.politicalRanking.listOfPoliticians
     },
-
-    getListsPoliticalApprobationRankings(state){
-      return state.politicalRanking.listOfApprobations
+    getPolitician(state){
+      return state.politicianSpecific.politician
     }
   }
 })

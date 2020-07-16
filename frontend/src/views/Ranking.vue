@@ -9,6 +9,7 @@
                     </v-col>
                 </v-row>
 
+                <!-- Gráfico de Ranking: primera fila -->
                 <v-row>
                     <v-col sm="12" md="12">
                         <v-divider class="my-3"></v-divider>
@@ -20,10 +21,18 @@
                 </v-row>
 
                 <v-divider class="my-3"></v-divider>
+                
                 <v-row>
+                <!-- Gráfico de pie: segunda fila y columna izquierda-->
                     <v-col sm="6" md="6">
                         <v-card >
-                            <!-- Panel de informacion con un estado false inicialmente -->
+                            <specificChart v-if="politicalRanking.estado"></specificChart>
+                        </v-card>
+                    </v-col>
+
+                <!-- Panel de información: segunda fila y columna derecha -->
+                    <v-col sm="6" md="6">
+                        <v-card >
                             <informationPanel v-if="politicalRanking.estado"></informationPanel>
                         </v-card>
                     </v-col>
@@ -36,6 +45,7 @@
 <script>
 import RankingChart from '../components/politicals/rankingChart.vue'
 import InformationPanel from '../components/politicals/InformationPanel.vue'
+import SpecificChart from '../components/politicals/specificChart.vue'
 import store from '../store/index'
 import {mapState, mapMutations, mapActions, mapGetters} from "vuex";
 import axios from 'axios';
@@ -48,6 +58,7 @@ export default {
     components: {
       RankingChart,
       InformationPanel,
+      SpecificChart
     },
     store:store,
 
