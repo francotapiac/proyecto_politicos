@@ -15,7 +15,7 @@ export default new Vuex.Store({
       estado: false
     },
     politicianSpecific: {
-      politician: null, 
+      politician: "", 
     }
   },
 

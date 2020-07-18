@@ -13,7 +13,7 @@
                 <v-row>
                     <v-col sm="12" md="12">
                         <v-divider class="my-3"></v-divider>
-                        <v-card >
+                        <v-card id="card-ranking">
                             <!-- Grafico de ranking con un estado false inicialmente -->
                             <rankingChart v-if="politicalRanking.estado"></rankingChart>
                         </v-card>
@@ -24,15 +24,15 @@
                 
                 <v-row>
                 <!-- Gráfico de pie: segunda fila y columna izquierda-->
-                    <v-col sm="6" md="6">
-                        <v-card >
+                    <v-col sm="12" md="6">
+                        <v-card id="card-specific-chart" height="100%">
                             <specificChart v-if="politicalRanking.estado"></specificChart>
                         </v-card>
                     </v-col>
 
                 <!-- Panel de información: segunda fila y columna derecha -->
-                    <v-col sm="6" md="6">
-                        <v-card >
+                    <v-col sm="12" md="6">
+                        <v-card  id="card-information-panel" height="100%" >
                             <informationPanel v-if="politicalRanking.estado"></informationPanel>
                         </v-card>
                     </v-col>
@@ -85,5 +85,17 @@ export default {
 </script>
 
 <style scoped>
+    #card-ranking{
+        background: rgb(14,0,27);
+        background: linear-gradient(90deg, rgba(14,0,27,0.7) 0%, rgba(14,0,27,0.7035013834635417) 100%);
+    }
+    #card-specific-chart{
+        background: rgb(14,0,27);
+        background: linear-gradient(90deg, rgba(14,0,27,0.7) 0%, rgba(14,0,27,0.7035013834635417) 100%);
+    }
 
+    #card-information-panel{
+        background: rgb(14,0,27);
+        background: linear-gradient(90deg, rgba(14,0,27,0.7) 0%, rgba(14,0,27,0.7035013834635417) 100%);
+    }
 </style>

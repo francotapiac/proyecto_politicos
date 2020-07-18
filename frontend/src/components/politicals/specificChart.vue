@@ -45,14 +45,21 @@ export default {
               type: 'pie',
               },
             labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+            
             responsive: [{
               breakpoint: 480,
               options: {
+                plotOptions: {
+                  pie: {
+                    expandOnClick: false
+                  }
+                },
                 chart: {
                   width: 200
                 },
                 legend: {
-                  position: 'bottom'
+                  position: 'bottom',
+                  
                 }
               }
             }]
@@ -69,12 +76,14 @@ export default {
         },
 
         selectPolitician(event){
+          //Obteniendo politico en especifico de ranking de politico
           let politician = this.getListsPoliticalRankings.filter(item => item.realName == event)
+          //Cambiando valor de politico en store
           this.SET_POLITICIAN({politician: politician})
           this.chartOptions = {
             labels: ["Positivo","Negativo","Muy positivo","Muy negativo"]
             }
-          this.series = [politician.countPositive,politician.countNegative,politician.countVeryPositive,politician.countVeryNegative]
+          this.series = [this.getPolitician[0].countPositive,this.getPolitician[0].countNegative,this.getPolitician[0].countVeryPositive,this.getPolitician[0].countVeryNegative]
         },
 
         createSpecificChart(){
@@ -95,7 +104,7 @@ export default {
     },
     
     mounted(){
-      this.selectPolitician()
+     // this.selectPolitician()
     },
 
     //Propiedad computada que obtiene los datos del store respecto a los politicos

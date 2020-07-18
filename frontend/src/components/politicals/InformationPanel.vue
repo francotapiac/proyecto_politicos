@@ -1,19 +1,69 @@
 <template>
-    <v-container>
-        <v-row justify="space-between">
-            <v-col v-for="(item, i) in items" :key="i" cols="12">
+    <v-container >
+  
+       <!-- Fila con nombres de columnas -->
+      <v-row no-gutters> 
+        <!-- Primera columna -->
+        <v-col sm="3"> 
+            
+        </v-col>
+    
+        <!-- Segunda columna -->
+        <v-col sm="6"> 
+          <v-card-text class="text-md-left font-weight-black"> Nombre</v-card-text>
+        </v-col>
 
-                <div class="d-flex flex-no-wrap justify-space-between">
-                    <v-card-title >
-                         <p class="display-1 text--primary">{{item.title}}</p>
-                    </v-card-title>
-                    <v-card-subtitle v-text="item.artist"></v-card-subtitle>
-                    <v-avatar class="ma-3" size="125" tile>
-                        <v-img :src="item.src"></v-img>
-                    </v-avatar>
-                </div>
-            </v-col>
-        </v-row>
+        <!-- Tercera columna --> 
+        <v-col sm="3"> 
+          <v-list-item-avatar >
+            <v-icon>thumb_up_alt</v-icon>/<v-icon>thumb_down_alt</v-icon>
+          </v-list-item-avatar>
+        </v-col>
+      </v-row>
+      <v-divider light></v-divider>
+      <!-- Fila con detalle de politicos --> 
+      
+
+        <!-- Scroll en lista de politicos -->
+        <v-virtual-scroll
+        :items="items"
+        :item-height="80"
+        height="300"
+      >
+        <template v-slot="{ item }">
+          <v-list-item :key="item" cols="12">
+            
+            <!-- Fila con detalle del politico -->
+            <v-row no-gutters align="center" justify="center" >
+              
+              <v-col sm="3">
+                
+                <v-btn fab icon>
+                  <v-avatar
+                    size="50"
+                    >
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Fotograf%C3%ADa_oficial_del_Presidente_Sebasti%C3%A1n_Pi%C3%B1era_-_2.jpg/1200px-Fotograf%C3%ADa_oficial_del_Presidente_Sebasti%C3%A1n_Pi%C3%B1era_-_2.jpg" 
+                    alt="piñera">
+                  </v-avatar>
+              </v-btn>
+              </v-col>
+              
+              <v-col sm="6" class="text-sm-left"> 
+                {{item.name}}
+              </v-col>
+
+              <v-col sm="3">
+                {{item.positive}}%/ {{100 - item.positive}}%
+              </v-col>
+            </v-row>
+            
+
+            </v-list-item>
+             <v-divider></v-divider>
+          </template>
+          
+        </v-virtual-scroll>
+   
     </v-container>
 </template>
 
@@ -25,27 +75,38 @@ export default {
      data: () => ({
       items: [
         {
-          src: 'http://www.gamba.cl/wp-content/uploads/2012/07/Pi%C3%B1era-comiendo-chorip%C3%A1n.jpg',
-          title: 'Piñera',
-          artist: 'Foster the People',
-        },
-        {
-          src: 'https://www.laizquierdadiario.cl/IMG/arton100906.jpg',
-          title: 'Kast',
-          artist: 'Ellie Goulding',
+          src: '',
+          name: '',
+          positive : '',
+          negative: ''
         },
       ],
     }),
 
-  
-    mounted(){
+    methods:{
+      fillListPoliticians(){
+        let listPoliticians = this.getListsPoliticalRankings
+     
+        for(var i= 0; i < listPoliticians.length; i++){
+          this.items[i] = {
+            src: '',
+            name: listPoliticians[i].realName,
+            positive: listPoliticians[i].aprobation,
+            negative: 100- listPoliticians[i].aprobation 
+          }
+        }
+      }
+    },
+
+    created(){
       console.log("4: information Panel")
-      this.items[0].artist =  this.getListsPoliticalNameRankings
+      this.fillListPoliticians()
     },
     
     //Propiedad computada que obtiene los datos del store respecto a los politicos
     computed: {
-      ...mapGetters(['getListsPoliticalNameRankings'])
+      ...mapGetters(['getListsPoliticalRankings']),
+
     }
 }
 </script>
