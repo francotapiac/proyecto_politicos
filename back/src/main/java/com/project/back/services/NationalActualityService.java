@@ -36,7 +36,6 @@ public class NationalActualityService {
         nationalActuality.setId(national.getId());
         nationalActuality.setName(national.getName());
         nationalActuality.setDescription(national.getDescription());
-        nationalActuality.setCantidad(national.getCantidad());
         return new ResponseEntity(nationalActualityRepository.save(nationalActuality),HttpStatus.CREATED);
     }
 
