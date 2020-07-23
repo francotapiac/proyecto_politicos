@@ -5,13 +5,15 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="politician")
-public class Politician {
+public class Politician implements Serializable{
     //Atributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Column(name="real_name", nullable = false)
     private String realName;
     @Column(name="aka_name", nullable = false)
@@ -31,11 +33,13 @@ public class Politician {
     @Column(name="count_very_positive", nullable = true)
     private Integer countVeryPositive;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_political_party", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_political_party",referencedColumnName = "id")
     @JsonIgnore
-    private PoliticalParty idPoliticalParty;
+    private PoliticalParty politicalParty;
+
+    public Politician(){}
+
 
     //Getters y Setters
     public String getRealName() {
@@ -94,6 +98,8 @@ public class Politician {
         return countVeryPositive;
     }
 
+    public PoliticalParty getPoliticalParty(){return politicalParty;}
+
     public void setCountNegative(Integer countNegative) {
         this.countNegative = countNegative;
     }
@@ -110,6 +116,9 @@ public class Politician {
         this.countVeryPositive = countVeryPositive;
     }
 
+    public void setPoliticalParty(PoliticalParty politicalParty){
+        this.politicalParty = politicalParty;
+    }
     //Metodos
     /*
     * calcularAprobaciones(Politician):float

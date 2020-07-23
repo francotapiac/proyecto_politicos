@@ -26,4 +26,6 @@ public class PoliticianNationalActuality {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private NationalActuality idActuality;
+
+    public PoliticianNationalActuality(){}
 }
