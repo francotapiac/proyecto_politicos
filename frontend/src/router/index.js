@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import TrendingTweets from '../views/Trendingtweets.vue'
-
+import RankingPoliticalParties from '../views/RankingPoliticalParties.vue'
 import Ranking from '../views/Ranking.vue'
 
 Vue.use(VueRouter)
@@ -22,6 +22,11 @@ Vue.use(VueRouter)
     path: '/rankings',
     name: 'Ranking',
     component: Ranking  
+  },
+  {
+    path: '/politicalparty/ranking',
+    name: 'RankingPoliticalParties',
+    component: RankingPoliticalParties
   },
   {
     path: '/about',

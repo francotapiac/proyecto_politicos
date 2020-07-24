@@ -13,6 +13,7 @@
                     flat
                     text
                     :to="item.route">
+                    <v-icon>{{item.icon}}</v-icon>
                         {{item.title}}
                     </v-btn>
                     <v-menu v-else
@@ -25,6 +26,7 @@
                             v-bind="attrs"
                             v-on="on"
                             >
+                            <v-icon>{{item.icon}}</v-icon>
                             {{ item.title }}
                             </v-btn>
                         </template>
@@ -132,6 +134,20 @@
                 },
                 {title: 'Ranking',
                  route: '/rankings',
+                 icon:  'bar_chart'
+                },
+
+            ] 
+            },
+            {title: 'Political Party',
+            icon:'group',
+            subItems: [
+                {title: 'Approval Graph',
+                 route: '/chartsApproval',
+                 icon:  'show_chart'
+                },
+                {title: 'Ranking',
+                 route: '/politicalparty/ranking',
                  icon:  'bar_chart'
                 },
 
