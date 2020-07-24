@@ -1,21 +1,60 @@
 <template>
-<!-- Dashboard Layout -->
     <v-app id="landing-page">
+        <div class="d-none d-md-flex d-lg-flex d-xl-flex">
+            <v-toolbar id="navbar" 
+            flat
+            dark>
+                <v-toolbar-title>
+                    Aplication
+                </v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items v-for="(item,index) in itemsNavbar" :key="index">
+                    <v-btn v-if="!item.subItems"
+                    flat
+                    text
+                    :to="item.route">
+                        {{item.title}}
+                    </v-btn>
+                    <v-menu v-else
+                    :rounded=0
+                    offset-y
+                    >
+                        <template v-slot:activator="{ attrs, on }">
+                            <v-btn
+                            text
+                            v-bind="attrs"
+                            v-on="on"
+                            >
+                            {{ item.title }}
+                            </v-btn>
+                        </template>
 
-        <!-- Sidebar 
-        si agrego v-model="drawer" a las props me permite abrir y cerrar el sidebar con el boton del navbar 
-        app = le indica a la app que este componente es parte del layout de la aplicacion
-        clipped = es para que el sidebar este debajo del navbar-->
-        <v-navigation-drawer id="side-bar"
-        app
-        clipped
-        expand-on-hover
-        fixed
-        >
+                        <v-list>
+                            <v-list-item
+                            v-for="item2 in item.subItems"
+                            :key="item2"
+                            link
+                            :to="item2.route"
+                            >
+                            <v-list-item-title v-text="item2.title"></v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+                </v-toolbar-items>
+            </v-toolbar>
+        </div>
+
+        <div class="d-flex d-sm-flex d-md-none">
+            <v-navigation-drawer id="side-bar"
+            v-model="drawer"
+            absolute
+            temporary
+            dark
+            >
             <!-- Elementos del Sidebar:
             dense = Reduce la altura máxima de los elementos de la lista
             -->
-            <v-list v-for="(item,index) in ItemsSideBar" :key="index" dense>
+            <v-list v-for="(item,index) in itemsNavbar" :key="index" dense>
                 <!-- Si no es una subcategoria -->
                 <v-list-item v-if="!item.subItems" :to=item.route link >
                     <v-list-item-action>
@@ -51,24 +90,17 @@
         <!-- Navbar:
         app = le indica a la app que este componente es parte del layout de la aplicacion
         clipped-left = indica que el sidebar que esta a la izquierda estará debajo del navbar -->
-        <v-app-bar id="nav-bar"
-        app
-        clipped-left
+        <v-toolbar id="navbar-small-display"
+        flat
+        dark
         >
             <!-- Elementos del navbar -->
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>Application name</v-toolbar-title>
-        </v-app-bar>
+        </v-toolbar>
+        </div>
+        <router-view></router-view>
 
-        <v-main>
-            <router-view></router-view>
-        </v-main>
-
-
-        <!-- Footer -->
-        <v-footer app id="footer">
-            <span>&copy; Created by Sebastian Orellana & Franco Tapia • {{ new Date().getFullYear() }}</span>
-        </v-footer>
     </v-app>
 </template>
 
@@ -80,7 +112,7 @@
     },
     data: () => ({
         drawer: false,
-        ItemsSideBar: [
+        itemsNavbar: [
             {title: "Home",
             route: '/',
             icon: 'home',
@@ -108,27 +140,30 @@
       ]
     }),
     created () {
-      this.$vuetify.theme.dark = true
     },
   }
 </script>
 
 <style scoped>
     #landing-page {
-        background: rgb(36,0,71);  
-        background: linear-gradient(90deg, rgba(36,0,71,1) 0%, rgba(59,2,115,1) 28%, rgba(140,3,104,1) 52%, rgba(166,3,93,1) 75%, rgba(217,4,82,1) 100%); 
+        background-color:#F2F2F2;    
     }
 
   #side-bar{
-        background: rgb(36,0,71);
-        background: linear-gradient(90deg, rgba(36,0,71,0.7315125879453344) 0%, rgba(59,2,115,0.7287114674971551) 100%); 
-  }
-    #nav-bar{
-        background: rgb(14,0,27);
-        background: linear-gradient(90deg, rgba(14,0,27,0.7) 0%, rgba(14,0,27,0.7035013834635417) 100%);
+        background: rgb(37,55,91);
+        background: linear-gradient(90deg, rgba(37,55,91,0.7699813201647847) 0%, rgba(37,55,91,0.7671801997166054) 100%);
+}
+    #navbar{
+        background-color: #25375B;
     }
     #footer{
         background: rgb(14,0,27);
         background: linear-gradient(90deg, rgba(14,0,27,0.7) 0%, rgba(14,0,27,0.7035013834635417) 100%);
+    }
+    #app-bar{
+        background-color: #F2F2F2;
+    }
+    #navbar-small-display{
+        background-color: #25375B;
     }
 </style>

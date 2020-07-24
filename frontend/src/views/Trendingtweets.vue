@@ -91,7 +91,8 @@
 
 <style scoped>
   #btn-back-home{
-    background-color:#D90452
+    background-color:#198CD3;
+    color:whitesmoke;
   }
   #btn-cantidad{
     background: rgb(14,0,27);
