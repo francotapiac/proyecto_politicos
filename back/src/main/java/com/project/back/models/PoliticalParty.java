@@ -33,6 +33,8 @@ public class PoliticalParty implements Serializable{
     private Integer countVeryNegative;
     @Column(name="count_very_positive", nullable = true)
     private Integer countVeryPositive;
+    @Column(name="url_image", nullable = true)
+    private String url_image;
 
     @OneToMany(mappedBy = "politicalParty",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
@@ -96,6 +98,10 @@ public class PoliticalParty implements Serializable{
     public Integer getCountVeryPositive() {
         return countVeryPositive;
     }
+
+    public String getUrlImage() {return url_image;}
+
+    public void setUrlImage(String url_image) {this.url_image = url_image; }
 
     public void setCountNegative(Integer countNegative) {
         this.countNegative = countNegative;
