@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 @CrossOrigin
@@ -32,6 +33,37 @@ public class PoliticianService {
     public List<Politician> getAllPoliticians(){
         System.out.println("aka:" + politicianRepository.findAll().get(0).getPoliticalParty());
         return politicianRepository.findAll();
+    }
+
+    //Obteniendo aprobaciones de los partidos politicos, según la aprobacion total de los politicos pertenecientes a cada partido
+    @RequestMapping(value="/politicalPartyRanking",  method = RequestMethod.GET)
+    @ResponseBody
+    public List<PoliticalParty> getPoliticalPartyRanking(){
+        List<PoliticalParty> politicalParties = politicalPartyRepository.findAll();
+        //Se calcula la aprobación de los politicos
+        this.getRanking();
+        //Para cada partido politico, se obtiene la lista de politicos relacionados
+        for(PoliticalParty politicalParty : politicalParties){
+            //Obteniendo politicos por partido politico
+            List<Politician> politicians = politicalParty.getPoliticians();
+            Integer positive = 0;
+            Integer veryPositive = 0;
+            Integer negative = 0;
+            Integer veryNegative = 0;
+            Integer sizePoliticians = politicians.size();
+            //Se recorre cada politico del partido politico
+            for(Politician politician: politicians){
+                positive = positive + politician.getCountPositive();
+                veryPositive = veryPositive + politician.getCountVeryPositive();
+                negative = negative + politician.getCountNegative();
+                veryNegative = veryNegative + politician.getCountVeryNegative();
+            }
+            //Modificando valores de aprobacion en partido politico
+            this.setCountPoliticalParty(politicalParty,positive,veryPositive,negative,veryNegative,sizePoliticians);
+        }
+        //Modificando ranking de politicos segun aprobacion
+        politicalParties.sort(Comparator.comparing(PoliticalParty::getAprobation).reversed());
+        return politicalParties;
     }
 
     @RequestMapping(value="/ranking" , method = RequestMethod.GET)
@@ -78,6 +110,26 @@ public class PoliticianService {
         newPolicitian.setPoliticalParty(politicalParties.get(0));
 
         return politicianRepository.save(newPolicitian);
+    }
+
+
+    // Modificar los contadores de aprobación
+    public PoliticalParty setCountPoliticalParty(PoliticalParty politicalParty,Integer positive,Integer veryPositive, Integer negative, Integer veryNegative, int sizePoliticians){
+
+        politicalParty.setCountPositive(positive);
+        politicalParty.setCountVeryPositive(veryPositive);
+        politicalParty.setCountNegative(negative);
+        politicalParty.setCountVeryNegative(veryNegative);
+        int positiveSum = positive + veryPositive;
+        int negativeSum = negative + veryNegative;
+        int total = positiveSum + negativeSum;
+        if(total != 0)
+            politicalParty.setAprobation((positiveSum*100)/(negativeSum + positiveSum));
+        else
+            politicalParty.setAprobation(0);
+
+
+        return politicalParty;
     }
 
 
