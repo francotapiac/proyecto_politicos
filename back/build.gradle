@@ -27,7 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     testImplementation 'io.projectreactor:reactor-test'
 
-    compile('mysql:mysql-connector-java:5.1.35')
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
     compile group: 'org.twitter4j', name: 'twitter4j-stream', version: '4.0.7'
     implementation 'org.twitter4j:twitter4j-core:4.0.7'
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
