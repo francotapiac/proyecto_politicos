@@ -16,6 +16,11 @@ export default new Vuex.Store({
     },
     politicianSpecific: {
       politician: "", 
+    },
+
+    politicalParty:{
+      listOfPoliticalParty: null,
+      dataIsReady: false,
     }
   },
 
@@ -37,6 +42,11 @@ export default new Vuex.Store({
       state.politicianSpecific.estado = false
       state.politicianSpecific.politician = item.politician
       state.politicianSpecific.estado = true
+    },
+
+    SET_LIST_POLITICAL_PARTY (state, list){
+      state.politicalParty.listOfPoliticalParty = list.listOfPoliticalParty;
+      state.politicalParty.dataIsReady = true;
     }
 
   },
@@ -51,7 +61,14 @@ export default new Vuex.Store({
         .then(res=>{
           commit('SET_RANKING',{listOfPoliticians: res.data}) //Se envia json con politicos y sus atributo
         })
-      }
+      },
+
+    async updatePartyRankingAction({commit}){
+      await axios.get('http://localhost:8889/politicalparty/ranking')
+      .then(res =>{
+        commit('SET_LIST_POLITICAL_PARTY',{listOfPoliticalParty: res.data})
+      })
+    }
   },
 
   modules: {
@@ -64,6 +81,9 @@ export default new Vuex.Store({
     },
     getPolitician(state){
       return state.politicianSpecific.politician
-    }
+    },
+    getListPoliticalParty(state){
+      return state.politicalParty.listOfPoliticalParty
+    },
   }
 })

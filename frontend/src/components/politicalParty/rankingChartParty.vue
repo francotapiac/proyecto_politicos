@@ -15,7 +15,7 @@ import store from '@/store/index';
 import {mapGetters, mapState} from "vuex";
 
 export default {
-    name: 'rankingChart',
+    name: 'rankingChartParty',
     components: {
         apexcharts: VueApexCharts
     },
@@ -120,14 +120,14 @@ export default {
     computed: {
       //La lista de politicos se obtiene de getters.
       //getListsPoliticalRankings corresponde al nombre de la cabecera del metodo en store.
-      ...mapGetters(['getListsPoliticalRankings'])
+      ...mapGetters(['getListPoliticalParty'])
     },
 
     //En esta sección se realizan los cambios sobre el data, con el objetivo de modificar el gráfico.
     methods:{
 
       //Actualiza el gráfico de ranking según los politicos obtenidos del back
-      updatePoliticalRankig(){
+      updatePoliticalPartyRankig(){
 
         //this.getListsPoliticalRankings corresponde a un método creado en el store (index), el cual es llamado desde el computed
         let listsPoliticalRankings = this.getListsPoliticalRankings.map(item => item.realName).slice(0,5)     //slice retorna los elementos del 0 a 4 de la lista
@@ -152,7 +152,7 @@ export default {
 
     //Se llama al método luego de crear el componente, debido a que se usa mounted
     mounted(){
-      this.updatePoliticalRankig()
+      this.updatePoliticalPartyRankig()
     }
 }
 </script>

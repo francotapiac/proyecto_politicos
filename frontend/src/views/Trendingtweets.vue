@@ -4,7 +4,7 @@
         <v-container fill-height>
         <v-row align-center>
             <v-col cols="9">
-            <h3 class="display-3">Trending Tweets</h3>
+            <h3 class="display-3" style="color:#198CD3;">Trending Tweets</h3>
             <span class="subheading">Aqui se coloca una pequeña descripcion de la sección</span>
             </v-col>
             <v-col cols="12" sm="3">

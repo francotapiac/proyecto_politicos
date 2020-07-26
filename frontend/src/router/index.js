@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import TrendingTweets from '../views/Trendingtweets.vue'
 import RankingPoliticalParties from '../views/RankingPoliticalParties.vue'
 import Ranking from '../views/Ranking.vue'
+import SpecificPoliticalParty from '../views/SpecificPoliticalParty.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ Vue.use(VueRouter)
     path: '/politicalparty/ranking',
     name: 'RankingPoliticalParties',
     component: RankingPoliticalParties
+  },
+  {
+    path: '/politicalparty',
+    name: 'SpecificPoliticalParty',
+    component: SpecificPoliticalParty
   },
   {
     path: '/about',

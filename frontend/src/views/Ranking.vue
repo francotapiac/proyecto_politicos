@@ -86,16 +86,10 @@ export default {
 
 <style scoped>
     #card-ranking{
-        background: rgb(14,0,27);
-        background: linear-gradient(90deg, rgba(14,0,27,0.7) 0%, rgba(14,0,27,0.7035013834635417) 100%);
     }
     #card-specific-chart{
-        background: rgb(14,0,27);
-        background: linear-gradient(90deg, rgba(14,0,27,0.7) 0%, rgba(14,0,27,0.7035013834635417) 100%);
     }
 
     #card-information-panel{
-        background: rgb(14,0,27);
-        background: linear-gradient(90deg, rgba(14,0,27,0.7) 0%, rgba(14,0,27,0.7035013834635417) 100%);
     }
 </style>

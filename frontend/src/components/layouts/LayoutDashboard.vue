@@ -142,14 +142,21 @@
             {title: 'Political Party',
             icon:'group',
             subItems: [
-                {title: 'Approval Graph',
-                 route: '/chartsApproval',
-                 icon:  'show_chart'
+                {
+                    title: 'Approval Graph',
+                    route: '/chartsApproval',
+                    icon:  'show_chart'
                 },
-                {title: 'Ranking',
-                 route: '/politicalparty/ranking',
-                 icon:  'bar_chart'
+                {
+                    title: 'Ranking',
+                    route: '/politicalparty/ranking',
+                    icon:  'bar_chart'
                 },
+                {
+                    title: 'Specific Party',
+                    route: '/politicalparty',
+                    icon: 'group'
+                }
 
             ] 
             }
@@ -170,7 +177,7 @@
         background: linear-gradient(90deg, rgba(37,55,91,0.7699813201647847) 0%, rgba(37,55,91,0.7671801997166054) 100%);
 }
     #navbar{
-        background-color: #25375B;
+        background-color: #292F33;
     }
     #footer{
         background: rgb(14,0,27);
@@ -180,6 +187,6 @@
         background-color: #F2F2F2;
     }
     #navbar-small-display{
-        background-color: #25375B;
+        background-color: #292F33;
     }
 </style>
