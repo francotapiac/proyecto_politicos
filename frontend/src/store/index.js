@@ -64,7 +64,7 @@ export default new Vuex.Store({
       },
 
     async updatePartyRankingAction({commit}){
-      await axios.get('http://localhost:8889/politicalparty/ranking')
+      await axios.get('http://localhost:8889/politician/politicalPartyRanking')
       .then(res =>{
         commit('SET_LIST_POLITICAL_PARTY',{listOfPoliticalParty: res.data})
       })
