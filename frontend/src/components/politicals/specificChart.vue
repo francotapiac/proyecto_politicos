@@ -4,7 +4,7 @@
       <v-card-title >
         <v-row align="center">
         <v-col >
-          <h4 class="text-sm-left">Gráfico Circular</h4>
+          <h2 style="margin-top:-40px;color:#292F33;margin-left:5px;">Tweet Analysis</h2>
         </v-col>
         <v-divider class="mx-4" vertical></v-divider>
         <v-col>
@@ -19,7 +19,7 @@
         </v-col>
         </v-row> 
       </v-card-title>
-      <v-card-actions>
+      <v-card-actions style="margin-top:-30px;">
         <apexchart type="pie" width="380" :options="chartOptions" :series="series"></apexchart>
       </v-card-actions>
     </div>

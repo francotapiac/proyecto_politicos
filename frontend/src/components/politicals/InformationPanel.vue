@@ -16,7 +16,7 @@
         <!-- Tercera columna --> 
         <v-col sm="3"> 
           <v-list-item-avatar >
-            <v-icon>thumb_up_alt</v-icon>/<v-icon>thumb_down_alt</v-icon>
+            <v-icon color="green">thumb_up_alt</v-icon> / <v-icon color="red">thumb_down_alt</v-icon>
           </v-list-item-avatar>
         </v-col>
       </v-row>
@@ -42,8 +42,7 @@
                   <v-avatar
                     size="50"
                     >
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Fotograf%C3%ADa_oficial_del_Presidente_Sebasti%C3%A1n_Pi%C3%B1era_-_2.jpg/1200px-Fotograf%C3%ADa_oficial_del_Presidente_Sebasti%C3%A1n_Pi%C3%B1era_-_2.jpg" 
-                    alt="piñera">
+                    <img :src=item.src >
                   </v-avatar>
               </v-btn>
               </v-col>
@@ -89,7 +88,7 @@ export default {
      
         for(var i= 0; i < listPoliticians.length; i++){
           this.items[i] = {
-            src: '',
+            src: listPoliticians[i].urlImage,
             name: listPoliticians[i].realName,
             positive: listPoliticians[i].aprobation,
             negative: 100- listPoliticians[i].aprobation 

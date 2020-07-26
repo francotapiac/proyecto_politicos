@@ -43,7 +43,7 @@ export default {
               },
             }
           },
-          colors: ['#5CB1EF', '#74BBEE', '#96CAEF', '#C3DDF1', 
+          colors: ['#379EC4','#53AAEC', '#5E707A', '#C0DFEE', '#1088B7',
           ],
           dataLabels: {
             enabled: true,
