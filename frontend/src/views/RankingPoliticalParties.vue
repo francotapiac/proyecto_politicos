@@ -4,13 +4,13 @@
         <v-container fill-height>
         <v-row align-center>
             <v-col cols="9">
-            <h3 class="display-3">Ranking Political Parties</h3>
+            <h3 class="display-3" style="color:#198CD3;">Ranking Political Parties</h3>
             <span class="subheading">Aqui se coloca una pequeña descripcion de la sección</span>
             </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <v-card>
+            <v-card flat outlined>
               <ranking-chart-party v-if="politicalParty.dataIsReady"></ranking-chart-party>
             </v-card>
           </v-col>

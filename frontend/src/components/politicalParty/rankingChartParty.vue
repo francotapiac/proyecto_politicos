@@ -43,7 +43,7 @@ export default {
               },
             }
           },
-          colors: ['#5CB1EF', '#74BBEE', '#96CAEF', '#C3DDF1', 
+          colors: ['#379EC4','#53AAEC', '#5E707A', '#C0DFEE', '#1088B7',
           ],
           dataLabels: {
             enabled: true,
@@ -130,8 +130,8 @@ export default {
       updatePoliticalPartyRankig(){
 
         //this.getListsPoliticalRankings corresponde a un método creado en el store (index), el cual es llamado desde el computed
-        let listsPoliticalRankings = this.getListsPoliticalRankings.map(item => item.realName).slice(0,5)     //slice retorna los elementos del 0 a 4 de la lista
-        let listsApprobationRankings = this.getListsPoliticalRankings.map(item => item.aprobation).slice(0,5)
+        let listsPoliticalRankings = this.getListPoliticalParty.map(item => item.realName).slice(0,5)     //slice retorna los elementos del 0 a 4 de la lista
+        let listsApprobationRankings = this.getListPoliticalParty.map(item => item.aprobation).slice(0,5)
 
         //Asigna el valor de la aprobación de cada politico al gráfico
         this.series= [{
