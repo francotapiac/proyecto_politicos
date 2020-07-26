@@ -72,13 +72,12 @@ public class PoliticianService {
         newPolicitian.setAprobation(resource.getAprobation());
         newPolicitian.setAprobationActuality(resource.getAprobationActuality());
         newPolicitian.setDescription(resource.getDescription());
+        newPolicitian.setUrlImage(resource.getUrlImage());
 
         politicalParties = politicalPartyRepository.findAll();
         newPolicitian.setPoliticalParty(politicalParties.get(0));
 
         return politicianRepository.save(newPolicitian);
-
-
     }
 
 
